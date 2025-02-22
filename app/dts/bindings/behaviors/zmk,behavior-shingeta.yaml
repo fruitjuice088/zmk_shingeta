@@ -1,0 +1,13 @@
+# Copyright (c) 2022 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+description: Shingeta Behavior
+
+compatible: "zmk,behavior-shingeta"
+
+include: one_param.yaml
+
+properties:
+  sg-entry-layer:
+    type: int
+    required: true
