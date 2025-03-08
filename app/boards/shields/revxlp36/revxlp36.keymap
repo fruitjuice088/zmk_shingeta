@@ -56,6 +56,11 @@
       tap-ms = <1>;
       bindings = <&kp INT5>, <&kp ESC>;
     )
+    ZMK_MACRO(macro_send_exit,
+      wait-ms = <1>;
+      tap-ms = <1>;
+      bindings = <&kp E>, <&kp X>, <&kp I>, <&kp T>;
+    )
   };
 
   combos {
@@ -87,6 +92,10 @@
       key-positions = <1 2>;
       bindings = <&kp JP_UNDER>;
     };
+    combo_send_exit {
+      key-positions = <0 11>;
+      bindings = <&macro_send_exit>;
+    };
 
   };
 
@@ -99,19 +108,19 @@
 
     base_layer {
       bindings = <
-        &kp Q         &kp Y         &kp U         &kp COMMA     &kp DOT          &kp K         &kp W         &kp H         &kp   L       &kp P
+        &kp Q         &kp Y         &kp U         &kp COMMA     &kp DOT          &kp K         &kp W         &kp H         &kp L         &kp P
         M_CT(O)       &lt SFT_L I   &mt LCTRL E   &mt LALT A    &kp MINUS        &kp F         &mt RALT T    &mt RCTRL R   &lt SFT_L N   M_CT(S)
         &lt MUS_L Z   &kp X         &lt FNC_L C   &kp V         &kp SEMI         &kp J         &kp D         &lt FNC_L G   &kp M         &lt MUS_L B
-                                    &mt LALT TAB  L_SYM(BSPC)   M_S(SPACE)       &sg ENTER     L_SYM(TAB)    &mt RGUI ESC
+                                    L_SYM(BSPC)   M_S(SPACE)    XXX              XXX           &sg ENTER     &mt RGUI TAB
       >;
     };
 
     sym_layer {
       bindings = <
-        ___           &kp N1        &kp N2        &kp N3        &kp JP_CARET     &kp UP        &kp PG_UP     &kp LEFT      &kp RIGHT     &kp JP_YEN
+        &kp ESC       &kp N1        &kp N2        &kp N3        &kp JP_CARET     &kp UP        &kp PG_UP     &kp LEFT      &kp RIGHT     &kp JP_YEN
         ___           &lt SFT_L N4  &mt LCTRL N5  &mt LALT N6   &kp JP_BSLH      &kp JP_SEMI   &kp JP_COLN   &kp JP_FSLH   &kp JP_AT     M_CT(JP_LBKT)
-        ___           &kp N7        &lt FNC_L N8  &kp N9        &kp N0           &kp DOWN      &kp PG_DN     &kp HOME      &kp END       &kp JP_RBKT
-                                    &kp LALT      L_SYM(DEL)    ___              ___           ___           ___
+        &kp DEL       &kp N7        &lt FNC_L N8  &kp N9        &kp N0           &kp DOWN      &kp PG_DN     &kp HOME      &kp END       &kp JP_RBKT
+                                    &none         ___           XXX              XXX           M_S(SPACE)    &kp ESC
       >;
     };
 
@@ -135,10 +144,10 @@
 
     mouse_layer {
       bindings = <
-        &mo OPT_L     XXX           XXX           XXX          XXX               &msc SCRL_UP   &kp K_BACK     &mmv MOVE_UP   &kp K_FORWARD   &mo OPT_L
+        &mo OPT_L     XXX           XXX           XXX          XXX               &msc SCRL_UP   &kp LA(LEFT)   &mmv MOVE_UP   &kp LA(RIGHT)   &mo OPT_L
         XXX           &kp LSHFT     &kp LCTRL     &kp LALT     XXX               &msc SCRL_DOWN &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT XXX
-        XXX           XXX           &kp F22       &kp F24      &kp F23           &msc SCRL_LEFT &kp F24        XXX            &msc SCRL_RIGHT XXX
-                                    &kp LALT      &kp ESC      &kp LSHFT         &mkp MB1       &mkp MB3       &mkp MB2
+        &kp ESC       XXX           &kp F22       &kp F24      &kp F23           &msc SCRL_LEFT &kp F24        XXX            &msc SCRL_RIGHT &kp ESC
+                                    &mkp MB3      &kp LSHFT    XXX               XXX            &mkp MB1       &mkp MB2
       >;
     };
 
@@ -147,7 +156,7 @@
         &sg Q         &sg W         &sg E         &sg R          &sg T           &sg Y         &sg U         &sg I         &sg O         &sg P
         &sg A         &sg S         &sg D         &sg F          &sg G           &sg H         &sg J         &sg K         &sg L         &sg SEMI
         &sg Z         &sg X         &sg C         &sg V          &sg B           &sg N         &sg M         &sg COMMA     &sg DOT       &sg SLASH
-                                    M_S(TAB)      &lt SGX_L BSPC M_S(SPACE)      XXX           &sg ENTER     &mt LGUI ESC
+                                  &lt SGX_L BSPC  M_S(SPACE)     XXX             XXX           XXX           &kp ESC
       >;
     };
 
@@ -156,7 +165,7 @@
         &kp ESC       &sg N1        &sg N2        &sg N3        &kp LEFT         &kp UP        ___           ___           ___           &sg JP_AT
         ___           &sg N4        &sg N5        &sg N6        &kp RIGHT        &kp JP_SEMI   ___           ___           ___           &kp JP_LBKT
         ___           &sg N7        &sg N8        &sg N9        &sg N0           &sg DOWN      ___           ___           ___           &mt RSHFT JP_RBKT
-                                    ___           ___           ___              XXX           &kp TAB       ___
+                                    XXX           &kp LS(SPACE) XXX              XXX           XXX           &sg ENTER
       >;
     };
 

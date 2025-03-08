@@ -122,7 +122,7 @@ static const uint64_t ng_key[] = {
 
 typedef struct {
     uint64_t key;
-    char kana[6];
+    char kana[5];
 } shingeta_keymap;
 
 // clang-format off
@@ -306,7 +306,7 @@ void tap_code32(uint32_t kc, int64_t timestamp) {
 }
 
 void send_string(const char * s, int64_t timestamp) {
-  for (int k = 0; k < 6; k++) {
+  for (int k = 0; k < 5; k++) {
     if (s == NULL) break;
     uint32_t kc = *(&ascii_to_keycode_lut[(uint8_t)(*s)]);
     tap_code32(kc, timestamp);
@@ -387,7 +387,7 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
     case LBKT ... FSLH:  // 458799 ... 458808 (LBKT ... FSLH (incl. BSLH, GRAV))
     {
       if (!enter_key_held) {
-        return ZMK_BEHAVIOR_TRANSPARENT;
+        return ZMK_BEHAVIOR_OPAQUE;
       }
 
       // HENK_ENT後初めてかなキーを押した
@@ -396,8 +396,7 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
         shingeta_clear();
         kana_key_pressed = true;
       }
-      ninputs[sg_chrcount] = keycode;  // save to input buffer
-      sg_chrcount++;
+      ninputs[sg_chrcount++] = keycode;  // save to input buffer
       keycomb |= ng_key[keycode - A];
 
       // 2文字あれば処理
@@ -438,7 +437,7 @@ static int on_keymap_binding_released(struct zmk_behavior_binding *binding,
     case LBKT ... FSLH:  // 458799 ... 458808 (LBKT ... FSLH (incl. BSLH, GRAV))
     {
       if (!enter_key_held) {
-        return ZMK_BEHAVIOR_TRANSPARENT;
+        return ZMK_BEHAVIOR_OPAQUE;
       }
 
       // 何かしら入力が残っていれば処理
