@@ -5,6 +5,7 @@ on:
     paths:
       - ".github/workflows/build.yml"
       - "app/**"
+  workflow_dispatch:
 
 env:
   KEYMAP: revxlp36
