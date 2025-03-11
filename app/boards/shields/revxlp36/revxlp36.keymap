@@ -163,8 +163,8 @@
     geta_ex_layer {
       bindings = <
         &kp ESC       &sg N1        &sg N2        &sg N3        &kp LEFT         &kp UP        ___           ___           ___           &sg JP_AT
-        ___           &sg N4        &sg N5        &sg N6        &kp RIGHT        &kp JP_SEMI   ___           ___           ___           &kp JP_LBKT
-        ___           &sg N7        &sg N8        &sg N9        &sg N0           &sg DOWN      ___           ___           ___           &mt RSHFT JP_RBKT
+        &kp TAB       &sg N4        &sg N5        &sg N6        &kp RIGHT        &kp JP_SEMI   ___           ___           ___           &kp JP_LBKT
+        &kp LS(TAB)   &sg N7        &sg N8        &sg N9        &sg N0           &sg DOWN      ___           ___           ___           &mt RSHFT JP_RBKT
                                     XXX           &kp LS(SPACE) XXX              XXX           XXX           &sg ENTER
       >;
     };
