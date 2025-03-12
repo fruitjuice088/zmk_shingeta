@@ -183,7 +183,7 @@ static shingeta_keymap sgmap[] = {
     {.key = B_D | B_I, .kana = "yo"},
     {.key = B_D | B_O, .kana = "mi"},
     {.key = B_D | B_P, .kana = "we"},
-    {.key = B_D | B_AT, .kana = "uxo"},
+    {.key = B_5 | B_AT, .kana = "who"},
 
     {.key = B_K | B_A, .kana = "ho"},
     {.key = B_K | B_S, .kana = "ji"},
@@ -217,8 +217,8 @@ static shingeta_keymap sgmap[] = {
     {.key = B_L | B_Q, .kana = "di"},
     {.key = B_L | B_W, .kana = "me"},
     {.key = B_L | B_E, .kana = "ke"},
-    {.key = B_L | B_R, .kana = "texi"},
-    {.key = B_L | B_T, .kana = "dexi"},
+    {.key = B_L | B_R, .kana = "twi"},
+    {.key = B_L | B_T, .kana = "dhi"},
     {.key = B_S | B_Y, .kana = "sye"},
     {.key = B_S | B_U, .kana = "pe"},
     {.key = B_S | B_I, .kana = "do"},
@@ -245,7 +245,7 @@ static shingeta_keymap sgmap[] = {
     {.key = B_S | B_M, .kana = "da"},
     {.key = B_S | B_COMMA, .kana = "pi"},
     {.key = B_S | B_DOT, .kana = "po"},
-    {.key = B_S | B_SLASH, .kana = "tixe"},
+    {.key = B_S | B_SLASH, .kana = "che"},
 
     {.key = B_L | B_1, .kana = "xya"},
     {.key = B_L | B_2, .kana = "mya"},
