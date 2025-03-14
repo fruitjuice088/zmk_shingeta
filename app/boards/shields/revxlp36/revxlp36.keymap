@@ -9,7 +9,7 @@
 #include <dt-bindings/zmk/bt.h>
 #include <dt-bindings/zmk/shingeta.h>
 
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 2700  // default: 600
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 2900  // default: 600
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 30    // default: 10
 #include <dt-bindings/zmk/pointing.h>
 
@@ -44,7 +44,8 @@
   sg-entry-layer = <SGT_L>;
 };
 &mmv {
-  time-to-max-speed-ms = <1000>;
+  trigger-period-ms = <16>;
+  time-to-max-speed-ms = <700>;
   acceleration-exponent = <1>;
 };
 
@@ -68,10 +69,12 @@
 
     combo_esc {
       key-positions = <16 17>;
+      layers = <BAS_L SYM_L SFT_L FNC_L>;
       bindings = <&macro_int5_esc>;
     };
     combo_k {
       key-positions = <17 18>;
+      layers = <BAS_L SYM_L SFT_L FNC_L>;
       bindings = <&kp K>;
     };
     combo_up {
@@ -81,7 +84,7 @@
     };
     combo_s_up {
       key-positions = <17 18>;
-      bindings = <&kp K>;
+      layers = <SFT_L>;
       bindings = <&kp LS(UP)>;
     };
     combo_tab {
