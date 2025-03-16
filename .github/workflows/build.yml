@@ -21,9 +21,15 @@ jobs:
           - board: seeeduino_xiao_ble
             shield: revxlp36
             artifact-name: revxlp36_xiao_ble
+          - board: seeeduino_xiao_rp2040
+            shield: gku34
+            artifact-name: gku34_xiao_ble
           - board: seeeduino_xiao_ble
             shield: settings_reset
-            artifact-name: revxlp36_xiao_ble_reset
+            artifact-name: xiao_ble_reset
+          - board: seeeduino_xiao_rp2040
+            shield: settings_reset
+            artifact-name: xiao_rp2040_reset
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -1,0 +1,186 @@
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/shingeta.h>
+
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 2900  // default: 600
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 30    // default: 10
+#include <dt-bindings/zmk/pointing.h>
+
+#define BAS_L 0
+#define SYM_L 1
+#define SFT_L 2
+#define FNC_L 3
+#define MUS_L 4
+#define SGT_L 5
+#define SGX_L 6
+#define OPT_L 7
+
+#define ___ &trans
+#define XXX &none
+
+#define M_CT(k) &mt LC(LSHFT) k
+#define M_S(k) &mt LSHFT k
+#define L_SYM(k) &lt SYM_L k
+
+
+&lt {
+  flavor = "tap-preferred";
+  tapping-term-ms = <180>;
+  quick-tap-ms = <175>;
+};
+&mt {
+  flavor = "tap-preferred";
+  tapping-term-ms = <180>;
+  quick-tap-ms = <175>;
+};
+&sg {
+  sg-entry-layer = <SGT_L>;
+};
+&mmv {
+  trigger-period-ms = <16>;
+  time-to-max-speed-ms = <700>;
+  acceleration-exponent = <1>;
+};
+
+
+/ {
+  macros {
+    ZMK_MACRO(macro_int5_esc,
+      wait-ms = <1>;
+      tap-ms = <1>;
+      bindings = <&kp INT5>, <&kp ESC>;
+    )
+    ZMK_MACRO(macro_send_exit,
+      wait-ms = <1>;
+      tap-ms = <1>;
+      bindings = <&kp E>, <&kp X>, <&kp I>, <&kp T>;
+    )
+  };
+
+  combos {
+    compatible = "zmk,combos";
+
+    combo_esc {
+      key-positions = <16 17>;
+      layers = <BAS_L SYM_L SFT_L FNC_L>;
+      bindings = <&macro_int5_esc>;
+    };
+    combo_k {
+      key-positions = <17 18>;
+      layers = <BAS_L SYM_L SFT_L FNC_L>;
+      bindings = <&kp K>;
+    };
+    combo_up {
+      key-positions = <17 18>;
+      layers = <SYM_L>;
+      bindings = <&kp UP>;
+    };
+    combo_s_up {
+      key-positions = <17 18>;
+      layers = <SFT_L>;
+      bindings = <&kp LS(UP)>;
+    };
+    combo_tab {
+      key-positions = <1 10>;
+      bindings = <&kp TAB>;
+    };
+    combo_under {
+      key-positions = <1 2>;
+      bindings = <&kp JP_UNDER>;
+    };
+    combo_send_exit {
+      key-positions = <0 11>;
+      bindings = <&macro_send_exit>;
+    };
+
+  };
+
+  keymap {
+    compatible = "zmk,keymap";
+    //  |     0       |     1       |     2       |     3       |     4     |    |     5       |     6       |     7       |     8       |     9     |
+    //  |    10       |    11       |    12       |    13       |    14     |    |    15       |    16       |    17       |    18       |    19     |
+    //  |    20       |    21       |    22       |    23       |    24     |    |    25       |    26       |    27       |    28       |    29     |
+    //                                            |    30       |    31     |    |    32       |    33       |    34       |
+
+    base_layer {
+      bindings = <
+        &kp Q         &kp Y         &kp U         &kp COMMA     &kp DOT          &kp K         &kp W         &kp H         &kp L         &kp P
+        M_CT(O)       &lt SFT_L I   &mt LCTRL E   &mt LALT A    &kp MINUS        &kp F         &mt RALT T    &mt RCTRL R   &lt SFT_L N   M_CT(S)
+        &lt MUS_L Z   &kp X         &lt FNC_L C   &kp V         &kp SEMI         &kp J         &kp D         &lt FNC_L G   &kp M         &lt MUS_L B
+                                                  L_SYM(BSPC)   M_S(SPACE)       &sg ENTER     &mt RGUI TAB
+      >;
+    };
+
+    sym_layer {
+      bindings = <
+        &kp ESC       &kp N1        &kp N2        &kp N3        &kp JP_CARET     &kp UP        &kp PG_UP     &kp LEFT      &kp RIGHT     &kp JP_YEN
+        ___           &lt SFT_L N4  &mt LCTRL N5  &mt LALT N6   &kp JP_BSLH      &kp JP_SEMI   &kp JP_COLN   &kp JP_FSLH   &kp JP_AT     M_CT(JP_LBKT)
+        &kp DEL       &kp N7        &lt FNC_L N8  &kp N9        &kp N0           &kp DOWN      &kp PG_DN     &kp HOME      &kp END       &kp JP_RBKT
+                                                  &none         ___              M_S(SPACE)    &kp ESC
+      >;
+    };
+
+    sftd_layer {
+      bindings = <
+        ___     &kp JP_EXCL   &kp JP_DQT    &kp HASH      &kp LS(JP_CARET)   &kp LS(UP)      &kp LS(PG_UP)   &kp LS(LEFT)    &kp LS(RIGHT)  &kp LS(JP_YEN)
+        ___     &kp JP_DLLR   &kp JP_PRCNT  &kp JP_AMPS   &kp LS(JP_BSLH)    &kp LS(JP_SEMI) &kp LS(JP_COLN) &kp LS(JP_FSLH) &kp LS(JP_AT)  &kp LS(JP_LBKT)
+        ___     &kp JP_SQT    &kp JP_LPAR   &kp JP_RPAR   ___                &kp LS(DOWN)    &kp LS(PG_DN)   &kp LS(HOME)    &kp LS(END)    &kp LS(JP_RBKT)
+                                            ___           ___                 ___             ___
+      >;
+    };
+
+    func_layer {
+      bindings = <
+        &kp F1        &kp F2        &kp F3        &kp F4        &kp F5           &kp C_VOL_UP  XXX           XXX           ___           &kp C_BRI_UP
+        &kp F6        &mt LSHFT F7  &mt LCTRL F8  &mt LALT F9   &kp F10          &kp C_VOL_DN  &kp RALT      &kp RCTRL     &kp RSHFT     &kp C_BRI_DN
+        &kp F11       &kp F12       &kp INT5      &kp K_APP     &kp LC(INS)      &kp LS(INS)   XXX           &kp INT4      XXX           XXX
+                                                  ___           ___              ___           ___
+      >;
+    };
+
+    mouse_layer {
+      bindings = <
+        &mo OPT_L     XXX           XXX           XXX          XXX               &msc SCRL_UP   &kp LA(LEFT)   &mmv MOVE_UP   &kp LA(RIGHT)   &mo OPT_L
+        XXX           &kp LSHFT     &kp LCTRL     &kp LALT     XXX               &msc SCRL_DOWN &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT XXX
+        &kp ESC       XXX           &kp F22       &kp F24      &kp F23           &msc SCRL_LEFT &kp F24        XXX            &msc SCRL_RIGHT &kp ESC
+                                                  &mkp MB3     &kp LSHFT         &mkp MB1       &mkp MB2
+      >;
+    };
+
+    shingeta_layer {
+      bindings = <
+        &sg Q         &sg W         &sg E         &sg R          &sg T           &sg Y         &sg U         &sg I         &sg O         &sg P
+        &sg A         &sg S         &sg D         &sg F          &sg G           &sg H         &sg J         &sg K         &sg L         &sg SEMI
+        &sg Z         &sg X         &sg C         &sg V          &sg B           &sg N         &sg M         &sg COMMA     &sg DOT       &sg SLASH
+                                                  &lt SGX_L BSPC  M_S(SPACE)     XXX           &kp ESC
+      >;
+    };
+
+    geta_ex_layer {
+      bindings = <
+        &kp ESC       &sg N1        &sg N2        &sg N3        &kp LEFT         &kp UP        ___           ___           ___           &sg JP_AT
+        &kp TAB       &sg N4        &sg N5        &sg N6        &kp RIGHT        &kp JP_SEMI   ___           ___           ___           &kp JP_LBKT
+        &kp LS(TAB)   &sg N7        &sg N8        &sg N9        &sg N0           &sg DOWN      ___           ___           ___           &mt RSHFT JP_RBKT
+                                                  XXX           &kp LS(SPACE)    XXX           &sg ENTER
+      >;
+    };
+
+    option_layer {
+      bindings = <
+        XXX           &bootloader   XXX           XXX           XXX              XXX           XXX           XXX           XXX           XXX
+        &bt BT_CLR    XXX           XXX           XXX           XXX              &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
+        XXX           XXX           XXX           XXX           XXX              XXX           XXX           XXX           XXX           XXX
+                                                  XXX           XXX              XXX           XXX
+      >;
+    };
+
+  };  // keymap
+
+};
