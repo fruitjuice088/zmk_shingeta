@@ -7,9 +7,6 @@ on:
       - "app/**"
   workflow_dispatch:
 
-env:
-  KEYMAP: revxlp36
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -19,14 +16,20 @@ jobs:
       matrix:
         include:
           - board: seeeduino_xiao_ble
-            shield: revxlp36
-            artifact-name: revxlp36_xiao_ble
+            shield: revxlp34
+            artifact-name: revxlp34_xiao_ble
+          - board: seeeduino_xiao
+            shield: revxlp34
+            artifact-name: revxlp34_xiao
           - board: seeeduino_xiao_rp2040
             shield: gku34
             artifact-name: gku34_xiao_ble
           - board: seeeduino_xiao_ble
             shield: settings_reset
             artifact-name: xiao_ble_reset
+          - board: seeeduino_xiao
+            shield: settings_reset
+            artifact-name: xiao_reset
           - board: seeeduino_xiao_rp2040
             shield: settings_reset
             artifact-name: xiao_rp2040_reset
@@ -98,6 +101,6 @@ jobs:
       - name: Merge Artifacts
         uses: actions/upload-artifact/merge@v4
         with:
-          name: ${{ env.KEYMAP }}
+          name: zmk_firmware
           pattern: artifact-*
           delete-merged: true
