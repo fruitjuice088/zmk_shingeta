@@ -1,0 +1,13 @@
+# Copyright (c) 2022 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+description: JP-Enter Behavior
+
+compatible: "zmk,behavior-jp-enter"
+
+include: one_param.yaml
+
+properties:
+  je-entry-layer:
+    type: int
+    required: true

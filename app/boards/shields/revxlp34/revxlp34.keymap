@@ -7,7 +7,7 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
-#include <dt-bindings/zmk/shingeta.h>
+#include <dt-bindings/zmk/jp_enter.h>
 
 #define ZMK_POINTING_DEFAULT_MOVE_VAL 2900  // default: 600
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 30    // default: 10
@@ -18,8 +18,8 @@
 #define SFT_L 2
 #define FNC_L 3
 #define MUS_L 4
-#define SGT_L 5
-#define SGX_L 6
+#define JPN_L 5
+#define JEX_L 6
 #define OPT_L 7
 
 #define ___ &trans
@@ -40,8 +40,8 @@
   tapping-term-ms = <180>;
   quick-tap-ms = <175>;
 };
-&sg {
-  sg-entry-layer = <SGT_L>;
+&je {
+  je-entry-layer = <JPN_L>;
 };
 &mmv {
   trigger-period-ms = <16>;
@@ -72,10 +72,10 @@
       layers = <BAS_L SYM_L SFT_L FNC_L>;
       bindings = <&macro_int5_esc>;
     };
-    combo_k {
+    combo_minus {
       key-positions = <17 18>;
       layers = <BAS_L SYM_L SFT_L FNC_L>;
-      bindings = <&kp K>;
+      bindings = <&kp MINUS>;
     };
     combo_up {
       key-positions = <17 18>;
@@ -93,7 +93,7 @@
     };
     combo_under {
       key-positions = <1 2>;
-      bindings = <&kp JP_UNDER>;
+      bindings = <&kp JP_UNER>;
     };
     combo_send_exit {
       key-positions = <0 11>;
@@ -111,27 +111,27 @@
 
     base_layer {
       bindings = <
-        &kp Q         &kp Y         &kp U         &kp COMMA     &kp DOT          &kp K         &kp W         &kp H         &kp L         &kp P
-        M_CT(O)       &lt SFT_L I   &mt LCTRL E   &mt LALT A    &kp MINUS        &kp F         &mt RALT T    &mt RCTRL R   &lt SFT_L N   M_CT(S)
-        &lt MUS_L Z   &kp X         &lt FNC_L C   &kp V         &kp SEMI         &kp J         &kp D         &lt FNC_L G   &kp M         &lt MUS_L B
-                                                  L_SYM(BSPC)   M_S(SPACE)       &sg ENTER     &mt RGUI TAB
+        &kp Q         &kp R         &kp U         &kp Y         &kp SEMI         &kp MINUS     &kp W         &kp T         &kp S         &kp P
+        M_CT(E)       &lt SFT_L I   &mt LCTRL A   &mt LALT O    &kp G            &kp H         &mt RALT J    &mt RCTRL K   &lt SFT_L L   M_CT(N)
+        &lt MUS_L Z   &kp X         &lt FNC_L C   &kp V         &kp COMMA        &kp DOT       &kp D         &lt FNC_L B   &kp M         &lt MUS_L F
+                                                  L_SYM(BSPC)   M_S(SPACE)       &je ENTER     &mt RGUI TAB
       >;
     };
 
     sym_layer {
       bindings = <
-        &kp ESC       &kp N1        &kp N2        &kp N3        &kp JP_CARET     &kp UP        &kp PG_UP     &kp LEFT      &kp RIGHT     &kp JP_YEN
-        ___           &lt SFT_L N4  &mt LCTRL N5  &mt LALT N6   &kp JP_BSLH      &kp JP_SEMI   &kp JP_COLN   &kp JP_FSLH   &kp JP_AT     M_CT(JP_LBKT)
-        &kp DEL       &kp N7        &lt FNC_L N8  &kp N9        &kp N0           &kp DOWN      &kp PG_DN     &kp HOME      &kp END       &kp JP_RBKT
+        &kp ESC       &kp N1        &kp N2        &kp N3        &kp JP_CARET     &kp JP_SEMI   &kp PG_UP     &kp PG_DN     &kp JP_FSLH   &kp JP_YEN
+        ___           &lt SFT_L N4  &mt LCTRL N5  &mt LALT N6   &kp JP_BSLH      &kp LEFT      &kp DOWN      &kp UP        &kp RIGHT     M_CT(JP_LBKT)
+        &kp DEL       &kp N7        &lt FNC_L N8  &kp N9        &kp N0           &kp JP_COLN   &kp HOME      &kp END       &kp JP_AT     &kp JP_RBKT
                                                   &none         ___              M_S(SPACE)    &kp ESC
       >;
     };
 
     sftd_layer {
       bindings = <
-        ___     &kp JP_EXCL   &kp JP_DQT    &kp HASH      &kp LS(JP_CARET)       &kp LS(UP)      &kp LS(PG_UP)   &kp LS(LEFT)    &kp LS(RIGHT)  &kp LS(JP_YEN)
-        ___     &kp JP_DLLR   &kp JP_PRCNT  &kp JP_AMPS   &kp LS(JP_BSLH)        &kp LS(JP_SEMI) &kp LS(JP_COLN) &kp LS(JP_FSLH) &kp LS(JP_AT)  &kp LS(JP_LBKT)
-        ___     &kp JP_SQT    &kp JP_LPAR   &kp JP_RPAR   ___                    &kp LS(DOWN)    &kp LS(PG_DN)   &kp LS(HOME)    &kp LS(END)    &kp LS(JP_RBKT)
+        ___     &kp JP_EXCL   &kp JP_DQT    &kp HASH      &kp LS(JP_CARET)       &kp LS(JP_SEMI) &kp LS(PG_UP)   &kp LS(PG_DN)   &kp LS(JP_FSLH) &kp LS(JP_YEN)
+        ___     &kp JP_DLLR   &kp JP_PRCNT  &kp JP_AMPS   &kp LS(JP_BSLH)        &kp LS(LEFT)    &kp LS(DOWN)    &kp LS(UP)      &kp LS(RIGHT)   &kp LS(JP_LBKT)
+        ___     &kp JP_SQT    &kp JP_LPAR   &kp JP_RPAR   ___                    &kp LS(JP_COLN) &kp LS(HOME)    &kp LS(END)     &kp LS(JP_AT)   &kp LS(JP_RBKT)
                                             ___           ___                    ___             ___
       >;
     };
@@ -150,25 +150,25 @@
         &mo OPT_L     XXX           XXX           XXX          XXX               &msc SCRL_UP   &kp LA(LEFT)   &mmv MOVE_UP   &kp LA(RIGHT)   &mo OPT_L
         XXX           &kp LSHFT     &kp LCTRL     &kp LALT     XXX               &msc SCRL_DOWN &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT XXX
         &kp ESC       XXX           &kp F22       &kp F24      &kp F23           &msc SCRL_LEFT &kp F24        XXX            &msc SCRL_RIGHT &kp ESC
-                                                  &mkp MB3      &kp LSHFT        &mkp MB1       &mkp MB2
+                                                  &mkp MB3     &kp LSHFT         &mkp MB1       &mkp MB2
       >;
     };
 
-    shingeta_layer {
+    jp_enter_layer {
       bindings = <
-        &sg Q         &sg W         &sg E         &sg R          &sg T           &sg Y         &sg U         &sg I         &sg O         &sg P
-        &sg A         &sg S         &sg D         &sg F          &sg G           &sg H         &sg J         &sg K         &sg L         &sg SEMI
-        &sg Z         &sg X         &sg C         &sg V          &sg B           &sg N         &sg M         &sg COMMA     &sg DOT       &sg SLASH
-                                                  &lt SGX_L BSPC  M_S(SPACE)     XXX           &kp ESC
+        &je Q         &je R         &je U         &je Y          &je SEMI        &je MINUS     &je W         &je T         &je S         &je P
+        &je E         &je I         &je A         &je O          &je G           &je H         &je J         &je K         &je L         &je N
+        &je Z         &je X         &je C         &je V          &je COMMA       &je DOT       &je D         &je B         &je M         &je F
+                                                  &lt JEX_L BSPC  M_S(SPACE)     XXX           &kp ESC
       >;
     };
 
     geta_ex_layer {
       bindings = <
-        &kp ESC       &sg N1        &sg N2        &sg N3        &kp LEFT         &kp UP        ___           ___           ___           &sg JP_AT
-        &kp TAB       &sg N4        &sg N5        &sg N6        &kp RIGHT        &kp JP_SEMI   ___           ___           ___           &kp JP_LBKT
-        &kp LS(TAB)   &sg N7        &sg N8        &sg N9        &sg N0           &sg DOWN      ___           ___           ___           &mt RSHFT JP_RBKT
-                                                  XXX           &kp LS(SPACE)    XXX           &sg ENTER
+        &kp ESC       &je N1        &je N2        &je N3        ___              ___           ___           ___           ___           &je JP_AT
+        &kp TAB       &je N4        &je N5        &je N6        ___              &kp LEFT      &kp DOWN      &kp UP        &kp RIGHT     &kp JP_LBKT
+        &kp LS(TAB)   &je N7        &je N8        &je N9        &je N0           ___           ___           ___           ___           &mt RSHFT JP_RBKT
+                                                  XXX           &kp LS(SPACE)    XXX           &je ENTER
       >;
     };
 

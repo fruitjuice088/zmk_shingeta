@@ -1,0 +1,18 @@
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+/ {
+    behaviors {
+#if ZMK_BEHAVIOR_OMIT(LT)
+        /omit-if-no-ref/
+#endif
+        je: shingeta {
+            compatible = "zmk,behavior-jp-enter";
+            #binding-cells = <1>;
+            display-name = "JpEnter";
+        };
+    };
+};
