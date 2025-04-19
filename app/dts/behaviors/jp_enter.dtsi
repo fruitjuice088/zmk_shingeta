@@ -9,7 +9,7 @@
 #if ZMK_BEHAVIOR_OMIT(LT)
         /omit-if-no-ref/
 #endif
-        je: shingeta {
+        je: jp_enter {
             compatible = "zmk,behavior-jp-enter";
             #binding-cells = <1>;
             display-name = "JpEnter";

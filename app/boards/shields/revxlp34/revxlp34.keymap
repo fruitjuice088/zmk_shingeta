@@ -93,7 +93,7 @@
     };
     combo_under {
       key-positions = <1 2>;
-      bindings = <&kp JP_UNER>;
+      bindings = <&kp JP_UNDER>;
     };
     combo_send_exit {
       key-positions = <0 11>;
