@@ -21,6 +21,8 @@
 
 LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
+#if DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT)
+
 struct behavior_jp_enter_config {
     zmk_keymap_layer_id_t je_entry_layer;
 };
@@ -125,3 +127,5 @@ static const struct behavior_driver_api behavior_jp_enter_driver_api = {
                           CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, &behavior_jp_enter_driver_api);
 
 DT_INST_FOREACH_STATUS_OKAY(KP_INST)
+
+#endif /* DT_HAS_COMPAT_STATUS_OKAY(DT_DRV_COMPAT) */

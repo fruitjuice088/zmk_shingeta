@@ -1,0 +1,8 @@
+file_format: "1"
+id: gku30
+name: GKU30
+type: shield
+url: https://github.com/tamago324/gku34
+requires: [pro_micro]
+features:
+  - keys

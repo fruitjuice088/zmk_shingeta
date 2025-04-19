@@ -1,0 +1,28 @@
+# Copyright (c) 2020 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+if SHIELD_REVXLP30
+
+config ZMK_KEYBOARD_NAME
+    default "revxlp30"
+
+config ZMK_USB
+    default y
+
+if ZMK_BLE
+
+# Deep sleep config
+config ZMK_SLEEP
+    default y # Enable deep sleep support
+config ZMK_IDLE_SLEEP_TIMEOUT
+    default 600000
+
+config BT_GATT_ENFORCE_SUBSCRIPTION
+    default n
+
+config ZMK_BLE_THREAD_PRIORITY
+    default 1
+
+endif # ZMK_BLE
+
+endif

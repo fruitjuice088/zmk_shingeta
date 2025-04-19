@@ -16,14 +16,14 @@ jobs:
       matrix:
         include:
           - board: seeeduino_xiao_ble
-            shield: revxlp34
-            artifact-name: revxlp34_xiao_ble
+            shield: revxlp30
+            artifact-name: revxlp30_xiao_ble
           - board: seeeduino_xiao
-            shield: revxlp34
-            artifact-name: revxlp34_xiao
+            shield: revxlp30
+            artifact-name: revxlp30_xiao
           - board: seeeduino_xiao_rp2040
-            shield: gku34
-            artifact-name: gku34_xiao_ble
+            shield: gku30
+            artifact-name: gku30_xiao_ble
           - board: seeeduino_xiao_ble
             shield: settings_reset
             artifact-name: xiao_ble_reset
