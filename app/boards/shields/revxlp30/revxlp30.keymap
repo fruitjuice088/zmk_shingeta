@@ -77,6 +77,16 @@
       layers = <BAS_L>;
       bindings = <&kp P>;
     };
+    cmb_c {
+      key-positions = <18 20>;
+      layers = <BAS_L>;
+      bindings = <&kp C>;
+    };
+    cmb_v {
+      key-positions = <18 21>;
+      layers = <BAS_L>;
+      bindings = <&kp V>;
+    };
     cmb_je_q {
       key-positions = <0 1>;
       layers = <JPN_L>;
@@ -86,6 +96,16 @@
       key-positions = <15 22>;
       layers = <JPN_L>;
       bindings = <&je P>;
+    };
+    cmb_jp_c {
+      key-positions = <18 20>;
+      layers = <JPN_L>;
+      bindings = <&je C>;
+    };
+    cmb_jp_v {
+      key-positions = <18 21>;
+      layers = <JPN_L>;
+      bindings = <&je V>;
     };
 
     cmb_coln {
@@ -196,7 +216,7 @@
       bindings = <
                       &kp R         &kp U         &kp Y         &kp C            &kp V         &kp W         &kp T         &kp S
         M_CT(E)       &lt SFT_L I   &mt LCTRL A   &mt LALT O    &kp G            &kp H         &mt RALT J    &mt RCTRL K   &lt SFT_L L   M_CT(N)
-        &lt MUS_L Z   &kp X         &lt FNC_L COMMA &kp DOT                                    &kp D         &lt FNC_L B   &kp M         &lt MUS_L F
+        &lt MUS_L Z   &kp X       &lt FNC_L COMMA &kp DOT                                      &kp D         &lt FNC_L B   &kp M         &lt MUS_L F
                                                   L_PAD(BSPC)   M_S(SPACE)       &je ENTER     &mt RGUI TAB
       >;
     };
@@ -212,10 +232,10 @@
 
     sftd_layer {
       bindings = <
-                   &kp LS(N1)   &kp LS(N2)   &kp LS(N3)   XXX                    XXX             XXX             XXX             &kp LS(SPACE)
-        &kp LS(N4) &kp LS(N4)   &kp LS(N5)   &kp LS(N6)   XXX                    &kp LS(LEFT)    &kp LS(DOWN)    &kp LS(UP)      &kp LS(RIGHT)   &kp LS(RIGHT)
-        ___        &kp LS(N7)   &kp LS(N8)   &kp LS(N9)                                          &kp LS(HOME)    &kp LS(PG_UP)   &kp LS(PG_DN)   &kp LS(END)
-                                            XXX           ___                    ___             ___
+                      &kp LS(N1)    &kp LS(N2)    &kp LS(N3)    XXX              XXX           XXX           XXX           &kp LS(SPACE)
+        &kp LS(N4)    &kp LS(N4)    &kp LS(N5)    &kp LS(N6)    XXX              &kp LS(LEFT)  &kp LS(DOWN)  &kp LS(UP)    &kp LS(RIGHT) &kp LS(RIGHT)
+        ___           &kp LS(N7)    &kp LS(N8)    &kp LS(N9)                                   &kp LS(HOME)  &kp LS(PG_UP) &kp LS(PG_DN) &kp LS(END)
+                                                  XXX           ___              ___            ___
       >;
     };
 
@@ -230,10 +250,10 @@
 
     mouse_layer {
       bindings = <
-                   &msc SCRL_LEFT &msc SCRL_RIGHT XXX          XXX               &msc SCRL_UP   &kp LA(LEFT)   &mmv MOVE_UP   &kp LA(RIGHT)
+                   &msc SCRL_LEFT &msc SCRL_RIGHT XXX          XXX               &msc SCRL_UP  &kp LA(LEFT) &mmv MOVE_UP   &kp LA(RIGHT)
         XXX           &kp LSHFT     &kp LCTRL     &kp LALT     XXX               &msc SCRL_DOWN &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT XXX
-        &lt OPT_L ESC &kp F22       &kp F23       &kp F24                                       &kp F24        &kp F22        &kp F23         &lt OPT_L ESC
-                                                  &mkp MB3     &kp LSHFT         &mkp MB1       &mkp MB2
+        &lt OPT_L ESC &kp F22       &kp F24       &kp F23                                      &kp F22      &kp F24        &kp F23       &lt OPT_L ESC
+                                                  &mkp MB3     &kp LSHFT         &mkp MB1      &mkp MB2
       >;
     };
 
@@ -242,7 +262,7 @@
                       &je R         &je U         &je Y          &je C           &je V         &je W         &je T         &je S
         &je E         &je I         &je A         &je O          &je G           &je H         &je J         &je K         &je L         &je N
         &je Z         &je X         &je COMMA     &je DOT                                      &je D         &je B         &je M         &je F
-                                                  &lt PAD_L BSPC  M_S(SPACE)     XXX           &je ENTER
+                                                  &lt PAD_L BSPC M_S(SPACE)      XXX           &je ENTER
       >;
     };
 

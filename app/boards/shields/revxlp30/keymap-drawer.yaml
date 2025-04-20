@@ -154,10 +154,10 @@ layers:
 
     - {t: ESC, h: OPT, type: held}
     - F22
+    - F24
     - F23
-    - F24
-    - F24
     - F22
+    - F24
     - F23
     - {t: ESC, h: OPT, type: held}
 
@@ -239,8 +239,12 @@ layers:
 combos:
   - {p: [0, 1], k: Q, l: [BASE]}
   - {p: [15, 22], k: P, l: [BASE]}
+  - {p: [18, 20], k: C, l: [BASE], a: bottom}
+  - {p: [18, 21], k: V, l: [BASE], a: bottom, o: .25}
   - {p: [0, 1], k: '&je Q', l: [JPN]}
   - {p: [15, 22], k: '&je P', l: [JPN]}
+  - {p: [18, 20], k: '&je C', l: [JPN], a: bottom}
+  - {p: [18, 21], k: '&je V', l: [JPN], a: bottom, o: .25}
 
   - {p: [9, 10], k: ':', l: [BASE, JPN]}
   - {p: [10, 11], k: Del, l: [BASE, JPN]}
