@@ -246,6 +246,7 @@ combos:
   - {p: [10, 11], k: Del, l: [BASE, JPN]}
   - {p: [19, 20], k: ;, l: [BASE, JPN]}
 
+  - {p: [1, 2], k: $$mdi:currency-jpy$$, l: [BASE, JPN]}
   - {p: [4, 5], k: ^, l: [BASE, JPN]}
   - {p: [5, 6], k: /, l: [BASE, JPN]}
   - {p: [6, 7], k: '@', l: [BASE, JPN]}

@@ -104,6 +104,11 @@
       bindings = <&kp JP_SEMI>;
     };
 
+    cmb_yen {
+      key-positions = <1 2>;
+      layers = <BAS_L JPN_L>;
+      bindings = <&kp JP_YEN>;
+    };
     cmb_caret {
       key-positions = <4 5>;
       layers = <BAS_L JPN_L>;
