@@ -23,7 +23,7 @@ jobs:
             artifact-name: revxlp30_xiao
           - board: seeeduino_xiao_rp2040
             shield: gku30
-            artifact-name: gku30_xiao_ble
+            artifact-name: gku30_xiao_rp2040
           - board: seeeduino_xiao_ble
             shield: settings_reset
             artifact-name: xiao_ble_reset
