@@ -148,7 +148,7 @@
     cmb_num_plus {
       key-positions = <1 10>;
       layers = <PAD_L>;
-      bindings = <&kp PLUS>;
+      bindings = <&kp JP_PLUS>;
     };
     cmb_num_times {
       key-positions = <2 11>;
@@ -164,27 +164,6 @@
       key-positions = <11 21>;
       layers = <PAD_L>;
       bindings = <&kp JP_FSLH>;
-    };
-
-    cmb_num_splus {
-      key-positions = <1 10>;
-      layers = <SFT_L>;
-      bindings = <&kp LS(PLUS)>;
-    };
-    cmb_num_stimes {
-      key-positions = <2 11>;
-      layers = <SFT_L>;
-      bindings = <&kp LS(JP_ASTRK)>;
-    };
-    cmb_num_sminus {
-      key-positions = <10 20>;
-      layers = <SFT_L>;
-      bindings = <&kp LS(MINUS)>;
-    };
-    cmb_num_sdiv {
-      key-positions = <11 21>;
-      layers = <SFT_L>;
-      bindings = <&kp LS(JP_FSLH)>;
     };
 
     cmb_esc {
