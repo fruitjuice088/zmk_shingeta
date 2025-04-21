@@ -15,11 +15,11 @@
 #include <dt-bindings/zmk/pointing.h>
 
 #define BAS_L 0
-#define PAD_L 1
-#define SFT_L 2
-#define FNC_L 3
-#define MUS_L 4
-#define JPN_L 5
+#define JPN_L 1
+#define PAD_L 2
+#define SFT_L 3
+#define FNC_L 4
+#define MUS_L 5
 #define OPT_L 6
 
 #define ___ &trans
@@ -61,6 +61,13 @@
       wait-ms = <1>;
       tap-ms = <1>;
       bindings = <&kp E>, <&kp X>, <&kp I>, <&kp T>;
+    )
+
+    ZMK_MACRO(je_z,
+      bindings = <&je Z>;
+    )
+    ZMK_MACRO(je_f,
+      bindings = <&je F>;
     )
   };
 
@@ -106,6 +113,17 @@
       key-positions = <18 21>;
       layers = <JPN_L>;
       bindings = <&je V>;
+    };
+
+    cmb_stab {
+      key-positions = <0 2>;
+      layers = <BAS_L JPN_L>;
+      bindings = <&kp LS(TAB)>;
+    };
+    cmb_tab {
+      key-positions = <9 11>;
+      layers = <BAS_L JPN_L>;
+      bindings = <&kp TAB>;
     };
 
     cmb_coln {
@@ -170,25 +188,25 @@
       bindings = <&kp JP_RBKT>;
     };
 
-    cmb_num_plus {
-      key-positions = <1 10>;
-      layers = <PAD_L>;
-      bindings = <&kp JP_PLUS>;
-    };
     cmb_num_times {
-      key-positions = <2 11>;
+      key-positions = <9 10>;
       layers = <PAD_L>;
       bindings = <&kp JP_ASTRK>;
     };
-    cmb_num_minus {
-      key-positions = <10 20>;
-      layers = <PAD_L>;
-      bindings = <&kp MINUS>;
-    };
     cmb_num_div {
-      key-positions = <11 21>;
+      key-positions = <10 11>;
       layers = <PAD_L>;
       bindings = <&kp JP_FSLH>;
+    };
+    cmb_num_plus {
+      key-positions = <19 20>;
+      layers = <PAD_L>;
+      bindings = <&kp JP_PLUS>;
+    };
+    cmb_num_minus {
+      key-positions = <20 21>;
+      layers = <PAD_L>;
+      bindings = <&kp MINUS>;
     };
 
     cmb_esc {
@@ -221,12 +239,21 @@
       >;
     };
 
+    jpn_layer {
+      bindings = <
+                      &je R         &je U         &je Y          &je C           &je V         &je W         &je T         &je S
+        &je E         &je I         &je A         &je O          &je G           &je H         &je J         &je K         &je L         &je N
+        &lt MUS_L &je_z    &je X    &je COMMA     &je DOT                                      &je D         &je B         &je M         &lt MUS_L &je_f
+                                                  ___            ___             XXX           &kp ENTER
+      >;
+    };
+
     pad_layer {
       bindings = <
-                      &kp N1        &kp N2        &kp N3        &kp LC(INS)      &kp LS(INS)   XXX           &kp COMMA     &kp SPACE
+                      &kp N1        &kp N2        &kp N3        &kp LC(INS)      &kp LS(INS)   &kp TAB       &kp COMMA     &kp SPACE
         &kp N0        &lt SFT_L N4  &mt LCTRL N5  &mt LALT N6   &kp BSPC         &kp LEFT      &kp DOWN      &kp UP        &kp RIGHT     M_CT(DEL)
         &kp DOT       &kp N7        &lt FNC_L N8  &kp N9                                       &kp HOME      &kp PG_UP     &kp PG_DN     &kp END
-                                                  &none         &kp LS(SPACE)    &kp ENTER     &kp ESC
+                                                  &none         ___              XXX           &kp ESC
       >;
     };
 
@@ -235,7 +262,7 @@
                       &kp LS(N1)    &kp LS(N2)    &kp LS(N3)    XXX              XXX           XXX           XXX           &kp LS(SPACE)
         &kp LS(N4)    &kp LS(N4)    &kp LS(N5)    &kp LS(N6)    XXX              &kp LS(LEFT)  &kp LS(DOWN)  &kp LS(UP)    &kp LS(RIGHT) &kp LS(RIGHT)
         ___           &kp LS(N7)    &kp LS(N8)    &kp LS(N9)                                   &kp LS(HOME)  &kp LS(PG_UP) &kp LS(PG_DN) &kp LS(END)
-                                                  XXX           ___              ___            ___
+                                                  L_PAD(BSPC)   ___              ___            ___
       >;
     };
 
@@ -254,15 +281,6 @@
         XXX           &kp LSHFT     &kp LCTRL     &kp LALT     XXX               &msc SCRL_DOWN &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT XXX
         &lt OPT_L ESC &kp F22       &kp F24       &kp F23                                      &kp F22      &kp F24        &kp F23       &lt OPT_L ESC
                                                   &mkp MB3     &kp LSHFT         &mkp MB1      &mkp MB2
-      >;
-    };
-
-    jpn_layer {
-      bindings = <
-                      &je R         &je U         &je Y          &je C           &je V         &je W         &je T         &je S
-        &je E         &je I         &je A         &je O          &je G           &je H         &je J         &je K         &je L         &je N
-        &je Z         &je X         &je COMMA     &je DOT                                      &je D         &je B         &je M         &je F
-                                                  &lt PAD_L BSPC M_S(SPACE)      XXX           &je ENTER
       >;
     };
 
