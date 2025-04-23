@@ -1,0 +1,259 @@
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/outputs.h>
+#include <dt-bindings/zmk/jp_enter.h>
+
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 2900  // default: 600
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 30    // default: 10
+#include <dt-bindings/zmk/pointing.h>
+
+#define BAS_L 0
+#define JPN_L 1
+#define PAD_L 2
+#define SYM_L 3
+#define FNC_L 4
+#define MUS_L 5
+#define OPT_L 6
+
+#define ___ &trans
+#define XXX &none
+
+#define M_CT(k) &mt LC(LSHFT) k
+#define M_S(k) &mt LSHFT k
+#define L_PAD(k) &lt PAD_L k
+#define L_SFT(k) &lt SFT_L k
+#define L_MUS(k) &lt MUS_L k
+
+
+&lt {
+  flavor = "tap-preferred";
+  tapping-term-ms = <180>;
+  quick-tap-ms = <175>;
+};
+&mt {
+  flavor = "tap-preferred";
+  tapping-term-ms = <180>;
+  quick-tap-ms = <175>;
+};
+&je {
+  je-entry-layer = <JPN_L>;
+};
+&mmv {
+  trigger-period-ms = <16>;
+  time-to-max-speed-ms = <700>;
+  acceleration-exponent = <1>;
+};
+
+/ {
+  behaviors {
+    jmt: my_jp_mod_tap {
+      compatible = "zmk,behavior-hold-tap";
+      #binding-cells = <2>;
+      flavor = "tap-preferred";
+      tapping-term-ms = <180>;
+      quick-tap-ms = <175>;
+      bindings = <&kp>, <&je>;
+      display-name = "My Mod-Tap";
+    };
+  };
+  behaviors {
+    jlt: my_jp_layer_tap {
+      compatible = "zmk,behavior-hold-tap";
+      #binding-cells = <2>;
+      flavor = "tap-preferred";
+      tapping-term-ms = <180>;
+      quick-tap-ms = <175>;
+      bindings = <&mo>, <&je>;
+      display-name = "My Layer-Tap";
+    };
+  };
+};
+
+/ {
+  macros {
+    ZMK_MACRO(macro_int5_esc,
+      wait-ms = <1>;
+      tap-ms = <1>;
+      bindings = <&kp INT5>, <&kp ESC>;
+    )
+    ZMK_MACRO(macro_send_exit,
+      wait-ms = <1>;
+      tap-ms = <1>;
+      bindings = <&kp E>, <&kp X>, <&kp I>, <&kp T>;
+    )
+  };
+
+  combos {
+    compatible = "zmk,combos";
+
+    cmb_q {
+      key-positions = <0 1>;
+      layers = <BAS_L JPN_L>;
+      bindings = <&je Q>;
+    };
+    cmb_p {
+      key-positions = <6 7>;
+      layers = <BAS_L JPN_L>;
+      bindings = <&je P>;
+    };
+
+    cmb_tab {
+      key-positions = <9 11>;
+      layers = <BAS_L JPN_L>;
+      bindings = <&kp TAB>;
+    };
+    cmb_del {
+      key-positions = <10 11>;
+      layers = <BAS_L JPN_L>;
+      bindings = <&kp DEL>;
+    };
+
+    cmb_num_times {
+      key-positions = <9 10>;
+      layers = <PAD_L>;
+      bindings = <&kp JP_ASTRK>;
+    };
+    cmb_num_div {
+      key-positions = <10 11>;
+      layers = <PAD_L>;
+      bindings = <&kp JP_FSLH>;
+    };
+    cmb_num_pius {
+      key-positions = <19 20>;
+      layers = <PAD_L>;
+      bindings = <&kp JP_PLUS>;
+    };
+    cmb_num_minus {
+      key-positions = <20 21>;
+      layers = <PAD_L>;
+      bindings = <&kp JP_MINUS>;
+    };
+
+    cmb_r_times {
+      key-positions = <4 5>;
+      layers = <PAD_L>;
+      bindings = <&kp JP_ASTRK>;
+    };
+    cmb_r_pius {
+      key-positions = <5 6>;
+      layers = <PAD_L>;
+      bindings = <&kp JP_PLUS>;
+    };
+    cmb_r_minus {
+      key-positions = <6 7>;
+      layers = <PAD_L>;
+      bindings = <&kp JP_MINUS>;
+    };
+
+    cmb_enter {
+      key-positions = <14 16>;
+      layers = <JPN_L>;
+      bindings = <&kp ENTER>;
+    };
+
+    cmb_int5_esc {
+      key-positions = <14 15>;
+      layers = <BAS_L>;
+      bindings = <&macro_int5_esc>;
+    };
+    cmb_esc {
+      key-positions = <14 15>;
+      layers = <JPN_L PAD_L MUS_L>;
+      bindings = <&kp ESC>;
+    };
+
+    combo_send_exit {
+      key-positions = <8 19>;
+      bindings = <&macro_send_exit>;
+      layers = <BAS_L>;
+    };
+
+    combo_under {
+      key-positions = <23 24>;
+      bindings = <&je JP_UNDER>;
+      layers = <BAS_L JPN_L>;
+    };
+
+  };
+
+  keymap {
+    compatible = "zmk,keymap";
+    //                |     0       |     1       |     2       |     3     |    |     4       |     5       |     6       |     7       |
+    //  |     8       |     9       |    10       |    11       |    12     |    |    13       |    14       |    15       |    16       |    17     |
+    //  |    18       |    19       |    20       |    21       |                              |    22       |    23       |    24       |    25     |
+    //                                            |    26       |    27     |    |    28       |    29       |
+
+    base_layer {
+      bindings = <
+                      &kp L         &kp U         &kp F         &kp COMMA        &kp G         &kp W         &kp R         &kp Y
+        M_CT(E)       &mt LSFT I    &mt LCTRL A   &mt LALT O    &mt LGUI MINUS   &mt RGUI K    &mt RALT T    &mt RCTRL N   &mt RSFT S    M_CT(H)
+        L_MUS(Z)      &kp X         &lt FNC_L C   &kp V                                        &kp D         &lt FNC_L M   &kp J         L_MUS(B)
+                                                  L_PAD(BSPC)   M_S(SPACE)       &je ENTER     &lt SYM_L TAB
+      >;
+    };
+
+    jpn_layer {
+      bindings = <
+                      &je L         &je U         &je F          &je COMMA       &je G         &je W         &je R         &je Y
+        &je E         &je I         &je A         &je O          &je MINUS       &je K         &je T         &je N         &je S         &je H
+        &jlt MUS_L Z  &je X         &je C         &je V                                        &je D         &je M         &je J         &jlt MUS_L B
+                                                  ___            ___             XXX           ___
+      >;
+    };
+
+    pad_layer {
+      bindings = <
+                      &je N1        &je N2        &je N3         &je JP_SEMI     &je JP_COLN   &je JP_TILDE  &je JP_UNDER  &je JP_FSLH
+        &je N0        &jmt LSFT N4  &jmt LCTRL N5 &jmt LALT N6   &je DOT         &kp LEFT      &kp DOWN      &kp UP        &kp RIGHT     &je JP_EXCL
+        &je JP_PRCNT  &je N7        &jlt FNC_L N8 &je N9                                       &kp HOME      &je JP_HASH   &kp END       &je JP_QMARK
+                                                  XXX            &none           &none         &kp DEL
+      >;
+    };
+
+    sym_layer {
+      bindings = <
+                      &je JP_LBKT   &je JP_DQT    &je JP_RBKT   &je JP_AMPS      &je JP_CARET  &je JP_LT     &je JP_EQUAL  &je JP_RT
+        &je JP_AT     &je JP_LPAR   &je JP_SQT    &je JP_RPAR   &je JP_PIPE      &je JP_DLLR   &je JP_PLUS   &je JP_ASTRK  &je JP_MINUS  &none
+        &je JP_BSLH   &je JP_LBRC   &je JP_GRAVE  &je JP_RBRC                                  &je JP_PIPE   &je JP_AMPS   &none         &none
+                                                  &kp BSPC      ___              ___           XXX
+      >;
+    };
+
+    func_layer {
+      bindings = <
+                      &kp F2        &kp F3        &kp F4        &kp F5           &kp C_VOL_UP  &kp PG_UP     XXX           XXX
+        &kp F6        &mt LSHFT F7  &mt LCTRL F8  &mt LALT F9   &kp F10          &kp C_VOL_DN  &kp RALT      &kp RCTRL     &kp RSHFT     &kp C_BRI_UP
+        &kp F11       &kp F12       &kp INT5      &kp K_APP                                    &kp PG_DN     &kp INT4      XXX           &kp C_BRI_DN
+                                                  ___           ___              ___           ___
+      >;
+    };
+
+    mouse_layer {
+      bindings = <
+                   &msc SCRL_LEFT &msc SCRL_RIGHT XXX          XXX               &msc SCRL_UP  &kp LA(LEFT) &mmv MOVE_UP   &kp LA(RIGHT)
+        XXX           &kp LSHFT     &kp LCTRL     &kp LALT     XXX               &msc SCRL_DOWN &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT XXX
+        &lt OPT_L ESC &kp F22       &kp F24       &kp F23                                      &kp F22      &kp F24        &kp F23       &lt OPT_L ESC
+                                                  &mkp MB3     &kp LSHFT         &mkp MB1      &mkp MB2
+      >;
+    };
+
+    option_layer {
+      bindings = <
+                      XXX           XXX           XXX         &bootloader    &bootloader       XXX           XXX           XXX
+        &bt BT_CLR    &out OUT_TOG  XXX           XXX           XXX              &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
+        XXX           XXX           XXX           XXX                                          XXX           XXX           XXX           XXX
+                                                  XXX           XXX              XXX           XXX
+      >;
+    };
+
+  };  // keymap
+
+};
+

@@ -64,7 +64,7 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
     default:
     {
       if (!enter_key_held) {
-        return ZMK_BEHAVIOR_OPAQUE;
+        return raise_zmk_keycode_state_changed_from_encoded(binding->param1, true, event.timestamp);
       }
 
       // HENK_ENT後初めてかなキーを押した
@@ -104,7 +104,7 @@ static int on_keymap_binding_released(struct zmk_behavior_binding *binding,
     default:
     {
       if (!enter_key_held) {
-        return ZMK_BEHAVIOR_OPAQUE;
+        return raise_zmk_keycode_state_changed_from_encoded(binding->param1, false, event.timestamp);
       }
 
       return raise_zmk_keycode_state_changed_from_encoded(keycode, false, event.timestamp);
