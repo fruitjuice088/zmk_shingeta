@@ -136,20 +136,20 @@
       bindings = <&kp JP_MINUS>;
     };
 
-    cmb_r_times {
-      key-positions = <4 5>;
-      layers = <PAD_L>;
-      bindings = <&kp JP_ASTRK>;
-    };
     cmb_r_pius {
-      key-positions = <5 6>;
+      key-positions = <4 5>;
       layers = <PAD_L>;
       bindings = <&kp JP_PLUS>;
     };
     cmb_r_minus {
-      key-positions = <6 7>;
+      key-positions = <5 6>;
       layers = <PAD_L>;
       bindings = <&kp JP_MINUS>;
+    };
+    cmb_r_times {
+      key-positions = <6 7>;
+      layers = <PAD_L>;
+      bindings = <&kp JP_ASTRK>;
     };
 
     cmb_enter {
@@ -165,7 +165,7 @@
     };
     cmb_esc {
       key-positions = <14 15>;
-      layers = <JPN_L PAD_L MUS_L>;
+      layers = <JPN_L PAD_L>;
       bindings = <&kp ESC>;
     };
 
@@ -213,7 +213,7 @@
                       &je N1        &je N2        &je N3         &je JP_SEMI     &je JP_COLN   &je JP_TILDE  &je JP_UNDER  &je JP_FSLH
         &je N0        &jmt LSFT N4  &jmt LCTRL N5 &jmt LALT N6   &je DOT         &kp LEFT      &kp DOWN      &kp UP        &kp RIGHT     &je JP_EXCL
         &je JP_PRCNT  &je N7        &jlt FNC_L N8 &je N9                                       &kp HOME      &je JP_HASH   &kp END       &je JP_QMARK
-                                                  XXX            &none           &none         &kp DEL
+                                                  XXX            &kp LS(SPACE)   &kp ENTER     &kp DEL
       >;
     };
 
@@ -222,7 +222,7 @@
                       &je JP_LBKT   &je JP_DQT    &je JP_RBKT   &je JP_AMPS      &je JP_CARET  &je JP_LT     &je JP_EQUAL  &je JP_RT
         &je JP_AT     &je JP_LPAR   &je JP_SQT    &je JP_RPAR   &je JP_PIPE      &je JP_DLLR   &je JP_PLUS   &je JP_ASTRK  &je JP_MINUS  &none
         &je JP_BSLH   &je JP_LBRC   &je JP_GRAVE  &je JP_RBRC                                  &je JP_PIPE   &je JP_AMPS   &none         &none
-                                                  &kp BSPC      ___              ___           XXX
+                                                  &kp BSPC      M_S(SPACE)       ___           XXX
       >;
     };
 

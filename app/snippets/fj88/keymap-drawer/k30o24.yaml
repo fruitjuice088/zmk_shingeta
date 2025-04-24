@@ -61,7 +61,7 @@ layers:
     - {t: ▽, type: trans}
     - {t: ▽, type: trans}
     - {type: held}
-    - $$mdi:keyboard-return$$
+    - {t: ▽, type: trans}
   PAD:
     - 1
     - 2
@@ -93,8 +93,8 @@ layers:
     - '?'
 
     - {type: held}
-    - {t: ▽, type: trans}
-    - ''
+    - Sft+Space
+    - $$mdi:keyboard-return$$
     - Del
   SYM:
     - '['
@@ -126,12 +126,11 @@ layers:
     - ''
     - ''
 
-    - ''
+    - $$mdi:backspace$$
+    - {t: $$mdi:keyboard-space$$, h: Shift}
     - {t: ▽, type: trans}
-    - ''
     - {type: held}
 
-  # pq %
   FUNC:
     - F2
     - F3
@@ -141,7 +140,7 @@ layers:
     - 'PgUp'
     - ''
     - ''
-
+    
     - F6
     - {t: F7, h: LSHFT}
     - {t: F8, h: LCTRL}
@@ -163,7 +162,7 @@ layers:
     - $$phosphor:bold/sun-dim$$
 
     - {t: ▽, type: trans}
-    - {t: ▽, type: trans}
+    - {t: $$mdi:keyboard-space$$, h: Shift}
     - {t: ▽, type: trans}
     - {t: ▽, type: trans}
 
