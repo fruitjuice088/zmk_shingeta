@@ -91,12 +91,12 @@
     ZMK_MACRO(macro_abc,
       wait-ms = <1>;
       tap-ms = <1>;
-      bindings = <&kp LANG2>, <&macro_abc>;
+      bindings = <&kp LANG2>, <&kp INT5>;
     )
     ZMK_MACRO(macro_aiu,
       wait-ms = <1>;
       tap-ms = <1>;
-      bindings = <&kp LANG1>, <&macro_aiu>;
+      bindings = <&kp LANG1>, <&kp INT4>;
     )
   };
 
@@ -177,7 +177,7 @@
       bindings = <&kp JP_AT>;
     };
     cmb_bslh {
-      key-positions = <13 14>;
+      key-positions = <23 24>;
       layers = <BAS_L JPN_L>;
       bindings = <&kp JP_BSLH>;
     };
@@ -215,18 +215,18 @@
 
     base_layer {
       bindings = <
-                      &kp R         &kp U         &kp Y         &kp C            &kp V         &kp W         &kp T         &kp S
-        M_CT(E)       L_SFT(I)      &mt LCTRL A   &mt LALT O    &kp G            &kp H         &mt RALT J    &mt RCTRL K   L_SFT(L)      M_CT(N)
-        L_MUS(Z)      &kp X         &lt FNC_L COMMA &kp DOT                                    &kp D         &lt FNC_L B   &kp M         L_MUS(F)
+                      &kp W         &kp E         &kp R         &kp T            &kp Y         &kp U         &kp I         &kp O
+        M_CT(A)       L_SFT(S)      &mt LCTRL D   &mt LALT F    &kp G            &kp H         &mt RALT J    &mt RCTRL K   L_SFT(L)      M_CT(SEMI)
+        L_MUS(Z)      &kp X         &lt FNC_L C   &kp V                                        &kp M         &lt FNC_L COMMA &kp DOT     L_MUS(SLASH)
                                                   L_PAD(BSPC)   M_S(SPACE)       &je ENTER     &mt RMETA TAB
       >;
     };
 
     jpn_layer {
       bindings = <
-                      &je R         &je U         &je Y          &je C           &je V         &je W         &je T         &je S
-        &je E         &jlt SFT_L I  &je A         &je O          &je G           &je H         &je J         &je K         &jlt SFT_L L  &je N
-        &jlt MUS_L Z  &je X         &je COMMA     &je DOT                                      &je D         &je B         &je M         &jlt MUS_L F
+                      &je W         &je E         &je R          &je T           &je Y         &je U         &je I         &je O
+        &je A         &jlt SFT_L S  &jlt LCTL D   &je F          &je G           &je H         &je J         &je K         &jlt SFT_L L  &je SEMI
+        &jlt MUS_L Z  &je X         &je C         &je V                                        &je M         &je COMMA     &je DOT       &jlt MUS_L SLASH
                                                   ___            ___             XXX           &kp ENTER
       >;
     };
