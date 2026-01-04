@@ -17,7 +17,7 @@
 #define BAS_L 0
 #define JPN_L 1
 #define PAD_L 2
-#define SFT_L 3
+#define SYM_L 3
 #define FNC_L 4
 #define MUS_L 5
 #define OPT_L 6
@@ -28,7 +28,6 @@
 #define M_CT(k) &mt LC(LSHFT) k
 #define M_S(k) &mt LSHFT k
 #define L_PAD(k) &lt PAD_L k
-#define L_SFT(k) &lt SFT_L k
 #define L_MUS(k) &lt MUS_L k
 
 
@@ -134,7 +133,7 @@
       bindings = <&je P>;
     };
     cmb_jp_b {
-      key-positions = <20 22>;
+      key-positions = <20 21>;
       layers = <JPN_L>;
       bindings = <&je B>;
     };
@@ -148,6 +147,11 @@
       key-positions = <9 11>;
       layers = <BAS_L JPN_L>;
       bindings = <&kp TAB>;
+    };
+    cmb_enter {
+      key-positions = <14 16>;
+      layers = <BAS_L JPN_L>;
+      bindings = <&kp ENTER>;
     };
 
     cmb_del {
@@ -216,53 +220,53 @@
     base_layer {
       bindings = <
                       &kp W         &kp E         &kp R         &kp T            &kp Y         &kp U         &kp I         &kp O
-        M_CT(A)       L_SFT(S)      &mt LCTRL D   &mt LALT F    &kp G            &kp H         &mt RALT J    &mt RCTRL K   L_SFT(L)      M_CT(SEMI)
+        M_CT(A)       &mt LSFT S    &mt LCTRL D   &mt LALT F    &mt LMETA G      &mt RMETA H   &mt RALT J    &mt RCTRL K   &mt RSFT L    M_CT(SEMI)
         L_MUS(Z)      &kp X         &lt FNC_L C   &kp V                                        &kp M         &lt FNC_L COMMA &kp DOT     L_MUS(SLASH)
-                                                  L_PAD(BSPC)   M_S(SPACE)       &je ENTER     &mt RMETA TAB
+                                                  L_PAD(BSPC)   M_S(SPACE)       &je ENTER     &lt SYM_L TAB
       >;
     };
 
     jpn_layer {
       bindings = <
                       &je W         &je E         &je R          &je T           &je Y         &je U         &je I         &je O
-        &je A         &jlt SFT_L S  &jlt LCTL D   &je F          &je G           &je H         &je J         &je K         &jlt SFT_L L  &je SEMI
+        &je A         &jmt LSFT S   &jmt LCTL D   &je F          &je G           &je H         &je J         &je K         &je L         &je SEMI
         &jlt MUS_L Z  &je X         &je C         &je V                                        &je M         &je COMMA     &je DOT       &jlt MUS_L SLASH
-                                                  ___            ___             XXX           &kp ENTER
+                                                  ___            ___             XXX           ___
       >;
     };
 
     pad_layer {
       bindings = <
-                      &je N1        &je N2        &je N3         &kp LC(INS)     &kp LS(INS)   &kp TAB       &kp COMMA     &kp SPACE
-        &je N0        &jlt SFT_L N4 &jmt LCTRL N5 &jmt LALT N6   &kp BSPC        &kp LEFT      &kp DOWN      &kp UP        &kp RIGHT     M_CT(DEL)
-        &kp DOT       &je N7        &jlt FNC_L N8 &je N9                                       &kp HOME      &kp PG_UP     &kp PG_DN     &kp END
-                                                  &none          ___             XXX           &kp ESC
+                      &je N1        &je N2        &je N3         &je JP_SEMI     &je JP_COLN   &je JP_TILDE  &je JP_UNDER  &je JP_FSLH
+        &je N0        &jmt LSFT N4  &jmt LCTRL N5 &jmt LALT N6   &je DOT         &kp LEFT      &kp DOWN      &kp UP        &kp RIGHT     &je JP_EXCL
+        &je JP_PRCNT  &je N7        &jlt FNC_L N8 &je N9                                       &kp HOME      &je JP_HASH   &kp END       &je JP_QMARK
+                                                  XXX            &kp LS(SPACE)   &kp ENTER     &kp DEL
       >;
     };
 
-    sftd_layer {
+    sym_layer {
       bindings = <
-                      &je LS(N1)    &je LS(N2)    &je LS(N3)    XXX              XXX           &kp LS(TAB)   XXX           &kp LS(SPACE)
-        &je LS(N4)    &je LS(N4)    &je LS(N5)    &je LS(N6)    XXX              &kp LS(LEFT)  &kp LS(DOWN)  &kp LS(UP)    &kp LS(RIGHT) &kp LS(RIGHT)
-        ___           &je LS(N7)    &je LS(N8)    &je LS(N9)                                   &kp LS(HOME)  &kp LS(PG_UP) &kp LS(PG_DN) &kp LS(END)
-                                                  L_PAD(DEL)    &kp LS(SPACE)    ___           ___
+                      &je JP_LBKT   &je JP_DQT    &je JP_RBKT   &je JP_AMPS      &je JP_CARET  &je JP_LT     &je JP_EQUAL  &je JP_RT
+        &je JP_AT     &je JP_LPAR   &je JP_SQT    &je JP_RPAR   &je JP_PIPE      &je JP_DLLR   &je JP_PLUS   &je JP_ASTRK  &je JP_MINUS  &none
+        &je JP_BSLH   &je JP_LBRC   &je JP_GRAVE  &je JP_RBRC                                  &je JP_PIPE   &je JP_AMPS   &none         &none
+                                                  &kp BSPC      M_S(SPACE)       ___           XXX
       >;
     };
 
     func_layer {
       bindings = <
-                      &kp F2        &kp F3        &kp F4        &kp F5           &kp C_VOL_UP  XXX           XXX           XXX
+                      &kp F2        &kp F3        &kp F4        &kp F5           &kp C_VOL_UP  &kp PG_UP     XXX           XXX
         &kp F6        &mt LSHFT F7  &mt LCTRL F8  &mt LALT F9   &kp F10          &kp C_VOL_DN  &kp RALT      &kp RCTRL     &kp RSHFT     &kp C_BRI_UP
-        &kp F11       &kp F12       &macro_abc    &kp K_APP                                    XXX           &macro_aiu    XXX           &kp C_BRI_DN
+        &kp F11       &kp F12       &macro_abc    &kp K_APP                                    &kp PG_DN     &macro_aiu    XXX           &kp C_BRI_DN
                                                   ___           ___              ___           ___
       >;
     };
 
     mouse_layer {
       bindings = <
-                   &msc SCRL_LEFT &msc SCRL_RIGHT XXX          XXX               &msc SCRL_UP  &kp LA(LEFT) &mmv MOVE_UP   &kp LA(RIGHT)
-        XXX           &kp LSHFT     &kp LCTRL     &kp LALT     &kp F21           &msc SCRL_DOWN &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT XXX
-        &lt OPT_L ESC &kp F22       &kp F24       &kp F23                                      &kp F22      &kp F24        &kp F23       &lt OPT_L ESC
+                   &msc SCRL_LEFT &msc SCRL_RIGHT XXX          XXX               &msc SCRL_UP  &kp LG(LEFT) &mmv MOVE_UP   &kp LG(RIGHT)
+        XXX           &kp LSHFT     &kp LCTRL     &kp LALT     &kp LA(D)         &msc SCRL_DOWN &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT XXX
+        &lt OPT_L ESC &kp LA(S)     &kp LA(E)     &kp LA(F)                                     &kp LA(F)    &kp LA(E)      &kp LA(S)     &lt OPT_L ESC
                                                   &mkp MB3     &kp LSHFT         &mkp MB1      &mkp MB2
       >;
     };
