@@ -69,6 +69,7 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
 
       // HENK_ENT後初めてかなキーを押した
       if (!kana_key_pressed) {
+        tap_code32(INT1, event.timestamp);  // Henkan
         tap_code32(INT4, event.timestamp);  // Henkan
         kana_key_pressed = true;
       }
@@ -94,6 +95,7 @@ static int on_keymap_binding_released(struct zmk_behavior_binding *binding,
         tap_code32(ENTER, event.timestamp);
       }
       if (kana_key_pressed) {
+        tap_code32(INT2, event.timestamp); // Muhenkan
         tap_code32(INT5, event.timestamp); // Muhenkan
       }
       enter_key_held = false;

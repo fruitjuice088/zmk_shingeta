@@ -81,12 +81,22 @@
     ZMK_MACRO(macro_int5_esc,
       wait-ms = <1>;
       tap-ms = <1>;
-      bindings = <&kp INT5>, <&kp ESC>;
+      bindings = <&macro_abc>, <&kp ESC>;
     )
     ZMK_MACRO(macro_send_exit,
       wait-ms = <1>;
       tap-ms = <1>;
       bindings = <&kp E>, <&kp X>, <&kp I>, <&kp T>;
+    )
+    ZMK_MACRO(macro_abc,
+      wait-ms = <1>;
+      tap-ms = <1>;
+      bindings = <&kp LANG2>, <&macro_abc>;
+    )
+    ZMK_MACRO(macro_aiu,
+      wait-ms = <1>;
+      tap-ms = <1>;
+      bindings = <&kp LANG1>, <&macro_aiu>;
     )
   };
 
@@ -99,19 +109,19 @@
       bindings = <&kp Q>;
     };
     cmb_p {
-      key-positions = <15 22>;
+      key-positions = <6 7>;
       layers = <BAS_L>;
       bindings = <&kp P>;
     };
-    cmb_c {
-      key-positions = <18 20>;
+    cmb_b {
+      key-positions = <20 21>;
       layers = <BAS_L>;
-      bindings = <&kp C>;
+      bindings = <&kp B>;
     };
-    cmb_v {
-      key-positions = <18 21>;
+    cmb_n {
+      key-positions = <22 23>;
       layers = <BAS_L>;
-      bindings = <&kp V>;
+      bindings = <&kp N>;
     };
     cmb_je_q {
       key-positions = <0 1>;
@@ -119,46 +129,31 @@
       bindings = <&je Q>;
     };
     cmb_je_p {
-      key-positions = <15 22>;
+      key-positions = <6 7>;
       layers = <JPN_L>;
       bindings = <&je P>;
     };
-    cmb_jp_c {
-      key-positions = <18 20>;
+    cmb_jp_b {
+      key-positions = <20 22>;
       layers = <JPN_L>;
-      bindings = <&je C>;
+      bindings = <&je B>;
     };
-    cmb_jp_v {
-      key-positions = <18 21>;
+    cmb_jp_n {
+      key-positions = <22 23>;
       layers = <JPN_L>;
-      bindings = <&je V>;
+      bindings = <&je N>;
     };
 
-    cmb_stab {
-      key-positions = <0 2>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&kp LS(TAB)>;
-    };
     cmb_tab {
       key-positions = <9 11>;
       layers = <BAS_L JPN_L>;
       bindings = <&kp TAB>;
     };
 
-    cmb_coln {
-      key-positions = <9 10>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&kp JP_COLN>;
-    };
     cmb_del {
       key-positions = <10 11>;
       layers = <BAS_L JPN_L>;
       bindings = <&kp DEL>;
-    };
-    cmb_semi {
-      key-positions = <19 20>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&kp JP_SEMI>;
     };
 
     cmb_yen {
@@ -192,39 +187,8 @@
       bindings = <&macro_int5_esc>;
     };
     cmb_minus {
-      key-positions = <15 16>;
+      key-positions = <11 12>;
       layers = <BAS_L JPN_L>;
-      bindings = <&kp MINUS>;
-    };
-    cmb_lbkt {
-      key-positions = <22 23>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&kp JP_LBKT>;
-    };
-    cmb_rbkt {
-      key-positions = <23 24>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&kp JP_RBKT>;
-    };
-
-    cmb_num_times {
-      key-positions = <9 10>;
-      layers = <PAD_L>;
-      bindings = <&kp JP_ASTRK>;
-    };
-    cmb_num_div {
-      key-positions = <10 11>;
-      layers = <PAD_L>;
-      bindings = <&kp JP_FSLH>;
-    };
-    cmb_num_plus {
-      key-positions = <19 20>;
-      layers = <PAD_L>;
-      bindings = <&kp JP_PLUS>;
-    };
-    cmb_num_minus {
-      key-positions = <20 21>;
-      layers = <PAD_L>;
       bindings = <&kp MINUS>;
     };
 
@@ -254,7 +218,7 @@
                       &kp R         &kp U         &kp Y         &kp C            &kp V         &kp W         &kp T         &kp S
         M_CT(E)       L_SFT(I)      &mt LCTRL A   &mt LALT O    &kp G            &kp H         &mt RALT J    &mt RCTRL K   L_SFT(L)      M_CT(N)
         L_MUS(Z)      &kp X         &lt FNC_L COMMA &kp DOT                                    &kp D         &lt FNC_L B   &kp M         L_MUS(F)
-                                                  L_PAD(BSPC)   M_S(SPACE)       &je ENTER     &mt RGUI TAB
+                                                  L_PAD(BSPC)   M_S(SPACE)       &je ENTER     &mt RMETA TAB
       >;
     };
 
@@ -289,7 +253,7 @@
       bindings = <
                       &kp F2        &kp F3        &kp F4        &kp F5           &kp C_VOL_UP  XXX           XXX           XXX
         &kp F6        &mt LSHFT F7  &mt LCTRL F8  &mt LALT F9   &kp F10          &kp C_VOL_DN  &kp RALT      &kp RCTRL     &kp RSHFT     &kp C_BRI_UP
-        &kp F11       &kp F12       &kp INT5      &kp K_APP                                    XXX           &kp INT4      XXX           &kp C_BRI_DN
+        &kp F11       &kp F12       &macro_abc    &kp K_APP                                    XXX           &macro_aiu    XXX           &kp C_BRI_DN
                                                   ___           ___              ___           ___
       >;
     };
@@ -297,7 +261,7 @@
     mouse_layer {
       bindings = <
                    &msc SCRL_LEFT &msc SCRL_RIGHT XXX          XXX               &msc SCRL_UP  &kp LA(LEFT) &mmv MOVE_UP   &kp LA(RIGHT)
-        XXX           &kp LSHFT     &kp LCTRL     &kp LALT     XXX               &msc SCRL_DOWN &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT XXX
+        XXX           &kp LSHFT     &kp LCTRL     &kp LALT     &kp F21           &msc SCRL_DOWN &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT XXX
         &lt OPT_L ESC &kp F22       &kp F24       &kp F23                                      &kp F22      &kp F24        &kp F23       &lt OPT_L ESC
                                                   &mkp MB3     &kp LSHFT         &mkp MB1      &mkp MB2
       >;
