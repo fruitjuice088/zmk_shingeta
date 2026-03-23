@@ -104,13 +104,13 @@
 
     cmb_q {
       key-positions = <0 1>;
-      layers = <BAS_L>;
-      bindings = <&kp Q>;
-    };
-    cmb_je_q {
-      key-positions = <0 1>;
-      layers = <JPN_L>;
+      layers = <BAS_L JPN_L>;
       bindings = <&je Q>;
+    };
+     cmb_n {
+      key-positions = <15 16>;
+      layers = <BAS_L JPN_L>;
+      bindings = <&je N>;
     };
     cmb_stab {
       key-positions = <0 2>;
@@ -183,7 +183,7 @@
     jpn_layer {
       bindings = <
                       &je P         &je U         &je O          &je Y           &je W         &je E         &je K         &je F
-        &jmt LC(LSHFT) G  &jmt LSHFT I  &jmt LCTRL A  &jmt LALT D    &jmt LGUI C     &jmt RGUI T   &jmt RALT H   &jmt RCTRL J  &jmt RSHFT L  &jmt LC(LSHFT) S
+        &jmt LC(LSHFT) G  &jmt LSHFT I  &jmt LCTRL A  &jmt LALT D  &jmt LGUI C   &jmt RGUI T   &jmt RALT H   &jmt RCTRL J  &jmt RSHFT L  &jmt LC(LSHFT) S
         &jlt MUS_L Z  &je X         &je V         &je COMMA                                    &je B         &je M         &je R         &jlt MUS_L N
                                                   ___            ___             XXX           &kp ENTER
       >;
@@ -191,20 +191,18 @@
 
     pad_layer {
       bindings = <
-                      &je N1        &je N2        &je N3         &je DOT         &je JP_SEMI   &je JP_COLN   &kp UP        &je JP_FSLH
-        &je N0        &jmt LSFT N4  &jmt LCTRL N5 &jmt LALT N6   &je JP_HASH     &kp HOME      &kp LEFT      &kp DOWN      &kp RIGHT     &je JP_EXCL
-        &je JP_PRCNT  &je N7        &jlt FNC_L N8 &je N9                                       &kp END       &kp PG_UP     &kp PG_DN     &je JP_QMARK
+                      &je N1        &je N2        &je N3         &je DOT         &je PG_UP     &je JP_COLN   &kp UP        &je JP_FSLH
+        &je N0        &jmt LSFT N4  &jmt LCTRL N5 &jmt LALT N6   &je JP_HASH     &kp PG_DN     &kp LEFT      &kp DOWN      &kp RIGHT     &je JP_EXCL
+        &je JP_PRCNT  &je N7        &jlt FNC_L N8 &je N9                                       &kp HOME      &kp JP_SEMI   &kp END       &je JP_QMARK
                                                   XXX            ___             &kp ENTER     &kp DEL
       >;
     };
 
-    // TODO: 未配置の記号: JP_YEN (¥), JP_TILDE (~)
-    //   SYM_L の空き枠 (17, 24, 25) に配置を検討
     sym_layer {
       bindings = <
                       &je JP_LBKT   &je JP_DQT    &je JP_RBKT   &je JP_AMPS      &je JP_CARET  &je JP_LT     &je JP_EQUAL  &je JP_RT
-        &je JP_AT     &je JP_LPAR   &je JP_SQT    &je JP_RPAR   &je JP_PIPE      &je JP_DLLR   &je JP_PLUS   &je JP_ASTRK  &je JP_MINUS  XXX
-        &je JP_BSLH   &je JP_LBRC   &je JP_GRAVE  &je JP_RBRC                                  &je JP_PIPE   &je JP_AMPS   XXX           XXX
+        &je JP_AT     &je JP_LPAR   &je JP_SQT    &je JP_RPAR   &je JP_PIPE      &je JP_DLLR   &je JP_PLUS   &je JP_ASTRK  &je JP_MINUS  &je JP_FSLH
+        &je JP_BSLH   &je JP_LBRC   &je JP_GRAVE  &je JP_RBRC                                  &je JP_PIPE   &je JP_AMPS   &je JP_TILDE  &je JP_YEN
                                                   &kp BSPC      M_S(SPACE)       ___           XXX
       >;
     };
