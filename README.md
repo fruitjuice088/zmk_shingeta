@@ -18,21 +18,12 @@ ZMKの`behavior`として新下駄配列を実装。
 また、親指でEnterキーを押しながらキーを入力することで、ひらがなONと新下駄レイヤをアクティブ化するようにしている。
 
 
-セットアップ
+ビルド（Docker必須）
 ```bash
 cd zmk_shingeta
-
-python3 -m venv .venv
-source .venv/bin/activate
-pip install west
-unset ZEPHYR_BASE
-west init -l app/
-west update
-west zephyr-export
-pip install -r zephyr/scripts/requirements-base.txt
-pip install -r zephyr/scripts/requirements-extras.txt
-
-cd app
-source ../zephyr/zephyr-env.sh
-west build -b seeeduino_xiao_ble -- -DSHIELD=revxlp36 && ls -l build/zephyr/zmk.uf2
+./build.sh          # ビルド（初回は自動で west init + update）
+./build.sh clean    # ビルドキャッシュ削除
+./build.sh update   # 依存の更新（west update）
+./build.sh nuke     # volume全削除（完全リセット）
 ```
+成果物: `app/build/zephyr/zmk.uf2`
