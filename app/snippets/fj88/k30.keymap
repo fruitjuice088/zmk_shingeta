@@ -80,7 +80,7 @@
     ZMK_MACRO(macro_int5_esc,
       wait-ms = <1>;
       tap-ms = <1>;
-      bindings = <&kp LANG2>, <&kp INT5>, <&kp ESC>;
+      bindings = <&kp INT5>, <&kp LANG2>, <&kp ESC>;
     )
     ZMK_MACRO(macro_send_exit,
       wait-ms = <1>;
@@ -90,12 +90,12 @@
     ZMK_MACRO(macro_abc,
       wait-ms = <1>;
       tap-ms = <1>;
-      bindings = <&kp LANG2>, <&kp INT5>;
+      bindings = <&kp INT5>, <&kp LANG2>;
     )
     ZMK_MACRO(macro_aiu,
       wait-ms = <1>;
       tap-ms = <1>;
-      bindings = <&kp LANG1>, <&kp INT4>;
+      bindings = <&kp INT4>, <&kp LANG1>;
     )
   };
 
@@ -173,8 +173,8 @@
 
     base_layer {
       bindings = <
-                      &kp P         &kp U         &kp O         &kp Y            &kp W         &kp E         &kp K         &kp F
-        M_CT(G)       &mt LSHFT I   &mt LCTRL A   &mt LALT D    &mt LGUI C       &mt RGUI T    &mt RALT H    &mt RCTRL J   &mt RSHFT L   M_CT(S)
+                      &kp P         &kp U         &kp O         &kp Y            &kp W         &kp T         &kp K         &kp F
+        M_CT(G)       &mt LSHFT I   &mt LCTRL A   &mt LALT D    &mt LGUI C       &mt RGUI E    &mt RALT H    &mt RCTRL J   &mt RSHFT L   M_CT(S)
         L_MUS(Z)      &kp X         &lt FNC_L V   &kp COMMA                                    &kp B         &lt FNC_L M   &kp R         L_MUS(N)
                                                   L_PAD(BSPC)   M_S(SPACE)       &je ENTER     &lt SYM_L TAB
       >;
@@ -182,8 +182,8 @@
 
     jpn_layer {
       bindings = <
-                      &je P         &je U         &je O          &je Y           &je W         &je E         &je K         &je F
-        &jmt LC(LSHFT) G  &jmt LSHFT I  &jmt LCTRL A  &jmt LALT D  &jmt LGUI C   &jmt RGUI T   &jmt RALT H   &jmt RCTRL J  &jmt RSHFT L  &jmt LC(LSHFT) S
+                      &je P         &je U         &je O          &je Y           &je W         &je T         &je K         &je F
+        &jmt LC(LSHFT) G  &jmt LSHFT I  &jmt LCTRL A  &jmt LALT D  &jmt LGUI C   &jmt RGUI E   &jmt RALT H   &jmt RCTRL J  &jmt RSHFT L  &jmt LC(LSHFT) S
         &jlt MUS_L Z  &je X         &je V         &je COMMA                                    &je B         &je M         &je R         &jlt MUS_L N
                                                   ___            ___             XXX           &kp ENTER
       >;
