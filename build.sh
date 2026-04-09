@@ -4,9 +4,13 @@ set -euo pipefail
 IMAGE_NAME="zmk-build-local"
 VOLUMES=(zmk-zephyr zmk-modules zmk-tools zmk-west)
 BOARD="seeeduino_xiao_ble"
-SHIELD="revxlp30"
-KEYMAP="app/snippets/fj88/k30.keymap"
+KEYNUM=34
+SHIELD="revxlp${KEYNUM}"
+KEYMAP="app/snippets/fj88/k${KEYNUM}.keymap"
 KEYMAP_NAME="$(basename "${KEYMAP%.keymap}")"
+
+# KEY_LAYOUT="2vv3332+2 2+23332vv"  # k30
+KEY_LAYOUT="33333+2 2+33333"  # k34
 
 run_container() {
   docker run --rm \
@@ -46,13 +50,13 @@ case "${1:-build}" in
 
     # Generate keymap SVG
     run_container '
-      KM=/tmp/k30.keymap
+      KM=/tmp/k${KEYNUM}.keymap
       sed -e "s/&je /\&kp /g" -e "s/&jmt /\&mt /g" -e "s/&jlt /\&lt /g" \
           -e "s/JP_COLN/COLON/g" -e "s/JP_RT/GT/g" -e "s/JP_//g" \
         '"$KEYMAP"' > "$KM"
       CFG=app/snippets/fj88/keymap-drawer/config.yaml
       keymap -c "$CFG" parse -z "$KM" -l BASE JPN PAD SYM FUNC MSE OPT \
-        | sed "1s|^layout:.*|layout: {cols_thumbs_notation: 2vv3332+2 2+23332vv}|" \
+        | sed "1s|^layout:.*|layout: {cols_thumbs_notation: '"$KEY_LAYOUT"'}|" \
         > app/build/keymap.yaml
       keymap -c "$CFG" draw app/build/keymap.yaml -s BASE PAD SYM --keys-only -o app/build/keymap.svg
       keymap -c "$CFG" draw app/build/keymap.yaml -s BASE PAD SYM --combos-only -o app/build/keymap-combos.svg
@@ -87,3 +91,4 @@ case "${1:-build}" in
     echo "Usage: ./build.sh [build|clean|nuke|update]"
     ;;
 esac
+
