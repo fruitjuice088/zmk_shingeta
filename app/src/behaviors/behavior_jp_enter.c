@@ -7,6 +7,7 @@
 #define DT_DRV_COMPAT zmk_behavior_jp_enter
 
 #include <zephyr/device.h>
+#include <zephyr/kernel.h>
 #include <drivers/behavior.h>
 #include <zephyr/logging/log.h>
 
@@ -31,9 +32,12 @@ static int64_t ent_pressed_timestamp;
 static bool kana_key_pressed = false;
 static bool enter_key_held = false;
 
-static void tap_code32(uint32_t kc, int64_t timestamp) {
-    raise_zmk_keycode_state_changed_from_encoded(kc, true, timestamp);
-    raise_zmk_keycode_state_changed_from_encoded(kc, false, timestamp);
+static void tap_code32(uint32_t kc) {
+    int64_t ts = k_uptime_get();
+    raise_zmk_keycode_state_changed_from_encoded(kc, true, ts);
+    k_msleep(5);
+    ts = k_uptime_get();
+    raise_zmk_keycode_state_changed_from_encoded(kc, false, ts);
 }
 
 static int behavior_jp_enter_init(const struct device *dev) {
@@ -67,8 +71,8 @@ static int on_keymap_binding_pressed(struct zmk_behavior_binding *binding,
 
         // HENK_ENT後初めてかなキーを押した
         if (!kana_key_pressed) {
-            tap_code32(INT4, event.timestamp);  // Henkan
-            tap_code32(LANG1, event.timestamp); // Henkan
+            tap_code32(INT4);  // Henkan
+            tap_code32(LANG1); // Henkan
             kana_key_pressed = true;
         }
         return raise_zmk_keycode_state_changed_from_encoded(keycode, true, event.timestamp);
@@ -90,11 +94,11 @@ static int on_keymap_binding_released(struct zmk_behavior_binding *binding,
     case ENTER: {
         zmk_keymap_layer_deactivate(cfg->je_entry_layer);
         if ((event.timestamp - ent_pressed_timestamp) < 200 && !kana_key_pressed) {
-            tap_code32(ENTER, event.timestamp);
+            tap_code32(ENTER);
         }
         if (kana_key_pressed) {
-            tap_code32(INT5, event.timestamp);  // Muhenkan
-            tap_code32(LANG2, event.timestamp); // Muhenkan
+            tap_code32(INT5);  // Muhenkan
+            tap_code32(LANG2); // Muhenkan
         }
         enter_key_held = false;
         kana_key_pressed = false;

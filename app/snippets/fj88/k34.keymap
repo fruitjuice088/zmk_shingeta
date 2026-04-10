@@ -108,6 +108,11 @@
       layers = <BAS_L JPN_L>;
       bindings = <&je Q>;
     };
+    cmb_p {
+      key-positions = <7 8>;
+      layers = <BAS_L JPN_L>;
+      bindings = <&je P>;
+    };
      cmb_n {
       key-positions = <17 18>;
       layers = <BAS_L JPN_L>;
@@ -192,9 +197,9 @@
 
     pad_layer {
       bindings = <
-        XXX           &je N1        &je N2        &je N3         &je DOT         &je PG_UP     &je JP_COLN   &kp UP        &je JP_FSLH   XXX
-        &je N0        &jmt LSFT N4  &jmt LCTRL N5 &jmt LALT N6   &je JP_HASH     &kp PG_DN     &kp LEFT      &kp DOWN      &kp RIGHT     &je JP_EXCL
-        &je JP_PRCNT  &je N7        &jlt FNC_L N8 &je N9         XXX             XXX           &kp HOME      &kp JP_SEMI   &kp END       &je JP_QMARK
+        XXX           &je N1        &je N2        &je N3         &je JP_MINUS    &je PG_UP     &je JP_COLN   &kp UP        &je JP_FSLH   XXX
+        &je N0        &jmt LSFT N4  &jmt LCTRL N5 &jmt LALT N6   &je JP_HASH     &kp LEFT      &kp DOWN      &kp UP        &kp RIGHT     &je JP_EXCL
+        &je JP_PRCNT  &je N7        &jlt FNC_L N8 &je N9         XXX             &je PG_DN     &kp HOME      &kp JP_SEMI   &kp END       &je JP_QMARK
                                                   PRESSED        ___             &kp ENTER     &kp DEL
       >;
     };
