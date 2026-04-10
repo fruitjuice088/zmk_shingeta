@@ -4,13 +4,13 @@ set -euo pipefail
 IMAGE_NAME="zmk-build-local"
 VOLUMES=(zmk-zephyr zmk-modules zmk-tools zmk-west)
 BOARD="seeeduino_xiao_ble"
-KEYNUM=34
+KEYNUM=30
 SHIELD="revxlp${KEYNUM}"
 KEYMAP="app/snippets/fj88/k${KEYNUM}.keymap"
 KEYMAP_NAME="$(basename "${KEYMAP%.keymap}")"
 
-# KEY_LAYOUT="2vv3332+2 2+23332vv"  # k30
-KEY_LAYOUT="33333+2 2+33333"  # k34
+KEY_LAYOUT="2vv3332+2 2+23332vv"  # k30
+#KEY_LAYOUT="33333+2 2+33333"  # k34
 
 run_container() {
   docker run --rm \
