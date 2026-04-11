@@ -1,7 +1,7 @@
 use std::fs::{self, OpenOptions};
 use std::io::{self, Write};
 use std::path::{Path, PathBuf};
-use std::sync::{LazyLock, Mutex};
+use std::sync::{LazyLock, Mutex, OnceLock};
 
 use rdev::{listen, Event, EventType, Key};
 use serde::Serialize;
@@ -48,6 +48,7 @@ struct ModifierState {
 struct CliOptions {
     verbose: bool,
     data_dir: PathBuf,
+    windows_hook_debug: bool,
 }
 
 impl ModifierState {
@@ -87,12 +88,13 @@ fn host_name() -> String {
 }
 
 fn print_usage() {
-    println!("usage: typing-collector [--verbose] [--data-dir PATH]");
+    println!("usage: typing-collector [--verbose] [--data-dir PATH] [--windows-hook-debug]");
 }
 
 fn parse_cli() -> CliOptions {
     let mut verbose = false;
     let mut data_dir = PathBuf::from("data");
+    let mut windows_hook_debug = false;
 
     let mut args = std::env::args().skip(1);
 
@@ -107,6 +109,7 @@ fn parse_cli() -> CliOptions {
                 };
                 data_dir = PathBuf::from(path);
             }
+            "--windows-hook-debug" => windows_hook_debug = true,
             "-h" | "--help" => {
                 print_usage();
                 std::process::exit(0);
@@ -119,7 +122,7 @@ fn parse_cli() -> CliOptions {
         }
     }
 
-    CliOptions { verbose, data_dir }
+    CliOptions { verbose, data_dir, windows_hook_debug }
 }
 
 fn modifier_key_for_event_type(event_type: &EventType) -> Option<ModifierKey> {
@@ -319,8 +322,195 @@ fn callback(event: Event, options: &CliOptions) {
     }
 }
 
+#[cfg(target_os = "windows")]
+mod windows_hook_debug {
+    use std::ptr::null;
+
+    use windows_sys::Win32::Foundation::{HINSTANCE, LPARAM, LRESULT, WPARAM};
+    use windows_sys::Win32::System::LibraryLoader::GetModuleHandleW;
+    use windows_sys::Win32::UI::Input::KeyboardAndMouse::{
+        GetKeyboardLayout, GetKeyboardState, ToUnicodeEx, VK_CONTROL, VK_LCONTROL, VK_LMENU,
+        VK_LSHIFT, VK_LWIN, VK_MENU, VK_RCONTROL, VK_RMENU, VK_RSHIFT, VK_RWIN, VK_SHIFT,
+    };
+    use windows_sys::Win32::UI::WindowsAndMessaging::{
+        CallNextHookEx, DispatchMessageW, GetMessageW, KBDLLHOOKSTRUCT, MSG, SetWindowsHookExW,
+        TranslateMessage, UnhookWindowsHookEx, HC_ACTION, HHOOK, LLKHF_INJECTED, WH_KEYBOARD_LL,
+        WM_KEYDOWN, WM_KEYUP, WM_SYSKEYDOWN, WM_SYSKEYUP,
+    };
+
+    fn modifier_key_for_vk(vk_code: u32) -> Option<super::ModifierKey> {
+        match vk_code {
+            x if x == VK_SHIFT as u32 || x == VK_LSHIFT as u32 || x == VK_RSHIFT as u32 => {
+                Some(super::ModifierKey::Shift)
+            }
+            x if x == VK_CONTROL as u32
+                || x == VK_LCONTROL as u32
+                || x == VK_RCONTROL as u32 =>
+            {
+                Some(super::ModifierKey::Ctrl)
+            }
+            x if x == VK_MENU as u32 || x == VK_LMENU as u32 || x == VK_RMENU as u32 => {
+                Some(super::ModifierKey::Alt)
+            }
+            x if x == VK_LWIN as u32 || x == VK_RWIN as u32 => Some(super::ModifierKey::Meta),
+            _ => None,
+        }
+    }
+
+    fn update_modifier_state_from_vk(vk_code: u32, pressed: bool) {
+        let Some(modifier) = modifier_key_for_vk(vk_code) else {
+            return;
+        };
+
+        let mut state = super::MODIFIER_STATE
+            .lock()
+            .expect("modifier state mutex should not be poisoned");
+
+        match modifier {
+            super::ModifierKey::Shift => state.shift = pressed,
+            super::ModifierKey::Ctrl => state.ctrl = pressed,
+            super::ModifierKey::Alt => state.alt = pressed,
+            super::ModifierKey::Meta => state.meta = pressed,
+        }
+    }
+
+    fn keyboard_state_for_translation() -> Option<[u8; 256]> {
+        let mut keyboard_state = [0u8; 256];
+        unsafe {
+            if GetKeyboardState(keyboard_state.as_mut_ptr()) == 0 {
+                return None;
+            }
+        }
+
+        let state = super::MODIFIER_STATE
+            .lock()
+            .expect("modifier state mutex should not be poisoned");
+
+        if state.shift {
+            keyboard_state[VK_SHIFT as usize] |= 0x80;
+        }
+        if state.ctrl {
+            keyboard_state[VK_CONTROL as usize] |= 0x80;
+        }
+        if state.alt {
+            keyboard_state[VK_MENU as usize] |= 0x80;
+        }
+
+        Some(keyboard_state)
+    }
+
+    fn resolve_text(vk_code: u32, scan_code: u32) -> Option<String> {
+        let keyboard_state = keyboard_state_for_translation()?;
+        let layout = unsafe { GetKeyboardLayout(0) };
+
+        let mut buffer = [0u16; 8];
+        let written = unsafe {
+            ToUnicodeEx(
+                vk_code,
+                scan_code,
+                keyboard_state.as_ptr(),
+                buffer.as_mut_ptr(),
+                buffer.len() as i32,
+                1 << 2,
+                layout,
+            )
+        };
+
+        if written <= 0 {
+            return None;
+        }
+
+        let text = String::from_utf16_lossy(&buffer[..written as usize]);
+        super::normalize_printable_name(Some(text))
+    }
+
+    pub fn run() {
+        unsafe {
+            let instance: HINSTANCE = GetModuleHandleW(null());
+            let hook = SetWindowsHookExW(WH_KEYBOARD_LL, Some(hook_proc), instance, 0);
+
+            if hook.is_null() {
+                eprintln!("failed to install WH_KEYBOARD_LL hook");
+                std::process::exit(1);
+            }
+
+            println!("windows hook debug started");
+            println!("press Ctrl-C to stop");
+
+            let mut message = MSG::default();
+            while GetMessageW(&mut message, std::ptr::null_mut(), 0, 0) > 0 {
+                TranslateMessage(&message);
+                DispatchMessageW(&message);
+            }
+
+            UnhookWindowsHookEx(hook);
+        }
+    }
+
+    unsafe extern "system" fn hook_proc(code: i32, wparam: WPARAM, lparam: LPARAM) -> LRESULT {
+        if code != HC_ACTION as i32 {
+            return CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam);
+        }
+
+        let message = wparam as u32;
+        let keydown = matches!(message, WM_KEYDOWN | WM_SYSKEYDOWN);
+        let keyup = matches!(message, WM_KEYUP | WM_SYSKEYUP);
+
+        if !keydown && !keyup {
+            return CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam);
+        }
+
+        let keyboard = *(lparam as *const KBDLLHOOKSTRUCT);
+        let injected = (keyboard.flags & LLKHF_INJECTED) != 0;
+
+        if injected {
+            return CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam);
+        }
+
+        update_modifier_state_from_vk(keyboard.vkCode, keydown);
+
+        if keyup || modifier_key_for_vk(keyboard.vkCode).is_some() {
+            return CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam);
+        }
+
+        let mods = super::current_mods();
+
+        if super::has_shortcut_modifiers(&mods) {
+            println!(
+                "native kind=control vk_code={} scan_code={} mods={:?} resolved_text=None",
+                keyboard.vkCode, keyboard.scanCode, mods
+            );
+
+            return CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam);
+        }
+
+        let Some(text) = resolve_text(keyboard.vkCode, keyboard.scanCode) else {
+            return CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam);
+        };
+
+        println!(
+            "native kind=printable vk_code={} scan_code={} mods={:?} resolved_text={:?}",
+            keyboard.vkCode, keyboard.scanCode, mods, text
+        );
+
+        CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam)
+    }
+}
+
+#[cfg(not(target_os = "windows"))]
+mod windows_hook_debug {
+    pub fn run() {
+        eprintln!("windows hook debug is only supported on Windows");
+        std::process::exit(2);
+    }
+}
+
 fn main() {
     let options = parse_cli();
+    if options.windows_hook_debug {
+        windows_hook_debug::run();
+        return;
+    }
 
     println!("starting listener");
     println!("logging to {}", options.data_dir.display());
