@@ -3,6 +3,7 @@ use std::io::{self, Write};
 use std::path::{Path, PathBuf};
 use std::sync::{LazyLock, Mutex};
 
+#[cfg(not(target_os = "windows"))]
 use rdev::{listen, Event, EventType, Key};
 use serde::Serialize;
 use time::format_description::well_known::Rfc3339;
@@ -87,7 +88,7 @@ fn host_name() -> String {
 }
 
 fn print_usage() {
-    println!("usage: typing-collector [--verbose] [--data-dir PATH] [--windows-hook-debug]");
+    println!("usage: typing-collector [--verbose] [--data-dir PATH]");
 }
 
 fn parse_cli() -> CliOptions {
@@ -122,6 +123,7 @@ fn parse_cli() -> CliOptions {
     CliOptions { verbose, data_dir }
 }
 
+#[cfg(not(target_os = "windows"))]
 fn modifier_key_for_event_type(event_type: &EventType) -> Option<ModifierKey> {
     match event_type {
         EventType::KeyPress(Key::ShiftLeft) | EventType::KeyRelease(Key::ShiftLeft) => {
@@ -155,6 +157,7 @@ fn modifier_key_for_event_type(event_type: &EventType) -> Option<ModifierKey> {
     }
 }
 
+#[cfg(not(target_os = "windows"))]
 fn is_modifier_key(key: Key) -> bool {
     matches!(
         key,
@@ -170,6 +173,7 @@ fn is_modifier_key(key: Key) -> bool {
     )
 }
 
+#[cfg(not(target_os = "windows"))]
 fn update_modifier_state(event: &Event) {
     let Some(modifier) = modifier_key_for_event_type(&event.event_type) else {
         return;
@@ -258,6 +262,7 @@ fn normalize_printable_name(name: Option<String>) -> Option<String> {
     Some(name)
 }
 
+#[cfg(not(target_os = "windows"))]
 fn captured_event_from_rdev(event: Event, now: &OffsetDateTime) -> Option<CapturedEvent> {
     let key = match event.event_type {
         EventType::KeyPress(key) => key,
@@ -316,6 +321,7 @@ fn persist_captured_event(
     }
 }
 
+#[cfg(not(target_os = "windows"))]
 fn callback(event: Event, options: &CliOptions) {
     update_modifier_state(&event);
 
@@ -342,7 +348,7 @@ mod windows_native {
     };
     use windows_sys::Win32::UI::WindowsAndMessaging::{
         CallNextHookEx, DispatchMessageW, GetMessageW, KBDLLHOOKSTRUCT, MSG, SetWindowsHookExW,
-        TranslateMessage, UnhookWindowsHookEx, HC_ACTION, HHOOK, LLKHF_INJECTED, WH_KEYBOARD_LL,
+        TranslateMessage, UnhookWindowsHookEx, HC_ACTION, LLKHF_INJECTED, WH_KEYBOARD_LL,
         WM_KEYDOWN, WM_KEYUP, WM_SYSKEYDOWN, WM_SYSKEYUP,
     };
 
@@ -494,14 +500,17 @@ mod windows_native {
             0x0D => "Return".to_string(),
             0x1B => "Escape".to_string(),
             0x20 => "Space".to_string(),
-            0x08 => "Backspace".to_string(),
             _ => format!("VkCode({vk_code})"),
         }
     }
 
+    fn call_next(code: i32, wparam: WPARAM, lparam: LPARAM) -> LRESULT {
+        unsafe { CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam) }
+    }
+
     unsafe extern "system" fn hook_proc(code: i32, wparam: WPARAM, lparam: LPARAM) -> LRESULT {
         if code != HC_ACTION as i32 {
-            return CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam);
+            return call_next(code, wparam, lparam);
         }
 
         let message = wparam as u32;
@@ -509,20 +518,20 @@ mod windows_native {
         let keyup = matches!(message, WM_KEYUP | WM_SYSKEYUP);
 
         if !keydown && !keyup {
-            return CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam);
+            return call_next(code, wparam, lparam);
         }
 
-        let keyboard = *(lparam as *const KBDLLHOOKSTRUCT);
+        let keyboard = unsafe { *(lparam as *const KBDLLHOOKSTRUCT) };
         let injected = (keyboard.flags & LLKHF_INJECTED) != 0;
 
         if !injected {
-            return CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam);
+            return call_next(code, wparam, lparam);
         }
 
         update_modifier_state_from_vk(keyboard.vkCode, keydown);
 
         if keyup || is_modifier_vk(keyboard.vkCode) {
-            return CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam);
+            return call_next(code, wparam, lparam);
         }
 
         let mods = super::current_mods();
@@ -534,7 +543,7 @@ mod windows_native {
         };
 
         if !has_shortcut_modifiers && resolved_text.is_none() {
-            return CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam);
+            return call_next(code, wparam, lparam);
         }
 
         let now = super::now_local();
@@ -557,7 +566,7 @@ mod windows_native {
 
         super::persist_captured_event(&now, &runtime().data_dir, runtime().verbose, &captured);
 
-        CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam)
+        call_next(code, wparam, lparam)
     }
 }
 
@@ -578,11 +587,14 @@ fn main() {
         return;
     }
 
-    println!("starting listener");
-    println!("logging to {}", options.data_dir.display());
-    println!("press Ctrl-C to stop");
+    #[cfg(not(target_os = "windows"))]
+    {
+        println!("starting listener");
+        println!("logging to {}", options.data_dir.display());
+        println!("press Ctrl-C to stop");
 
-    if let Err(error) = listen(move |event| callback(event, &options)) {
-        eprintln!("listen error: {error:?}");
+        if let Err(error) = listen(move |event| callback(event, &options)) {
+            eprintln!("listen error: {error:?}");
+        }
     }
 }
