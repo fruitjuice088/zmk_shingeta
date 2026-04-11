@@ -108,136 +108,34 @@
   combos {
     compatible = "zmk,combos";
 
-    cmb_q {
-      key-positions = <9 10>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&je Q>;
-    };
-    cmb_f1 {
-      key-positions = <0 1>;
-      layers = <FNC_L>;
-      bindings = <&kp F1>;
-    };
+    cmb_q     { key-positions = < 9 10>; layers = <BAS_L JPN_L>; bindings = <&je Q>;        };
+    cmb_f1    { key-positions = < 0  1>; layers = <FNC_L>;       bindings = <&kp F1>;       };
+    cmb_tilde { key-positions = <19 20>; layers = <BAS_L JPN_L>; bindings = <&je JP_TILDE>; };
+    cmb_coln  { key-positions = <15 16>; layers = <BAS_L JPN_L>; bindings = <&je JP_COLN>;  };
+    cmb_bslh  { key-positions = <10 21>; layers = <BAS_L JPN_L>; bindings = <&je JP_BSLH>;  };
+    cmb_fslh  { key-positions = <15 22>; layers = <BAS_L JPN_L>; bindings = <&je JP_FSLH>;  };
+    cmb_lbkt  { key-positions = < 2  3>; layers = <BAS_L JPN_L>; bindings = <&je JP_LBKT>;  };
+    cmb_rbkt  { key-positions = < 4  5>; layers = <BAS_L JPN_L>; bindings = <&je JP_RBKT>;  };
+    cmb_lpar  { key-positions = <11 12>; layers = <BAS_L JPN_L>; bindings = <&je JP_LPAR>;  };
+    cmb_rpar  { key-positions = <13 14>; layers = <BAS_L JPN_L>; bindings = <&je JP_RPAR>;  };
+    cmb_stab  { key-positions = < 0  2>; layers = <BAS_L JPN_L>; bindings = <&kp LS(TAB)>;  };
+    cmb_tab   { key-positions = < 9 11>; layers = <BAS_L JPN_L>; bindings = <&kp TAB>;      };
 
-    cmb_tilde {
-      key-positions = <19 20>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&je JP_TILDE>;
-    };
-    cmb_coln {
-      key-positions = <15 16>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&je JP_COLN>;
-    };
-    cmb_bslh {
-      key-positions = <10 21>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&je JP_BSLH>;
-    };
-    cmb_fslh {
-      key-positions = <15 22>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&je JP_FSLH>;
-    };
-    cmb_lbkt {
-      key-positions = <2 3>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&je JP_LBKT>;
-    };
-    cmb_rbkt {
-      key-positions = <4 5>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&je JP_RBKT>;
-    };
-    cmb_lpar {
-      key-positions = <11 12>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&je JP_LPAR>;
-    };
-    cmb_rpar {
-      key-positions = <13 14>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&je JP_RPAR>;
-    };
-    cmb_stab {
-      key-positions = <0 2>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&kp LS(TAB)>;
-    };
-    cmb_tab {
-      key-positions = <9 11>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&kp TAB>;
-    };
+    cmb_enter { key-positions = <14 16>; layers = <BAS_L JPN_L>; bindings = <&kp ENTER>;    };
+    cmb_under { key-positions = <23 24>; layers = <BAS_L JPN_L>; bindings = <&je JP_UNDER>; };
+    cmb_dot   { key-positions = < 6 16>; layers = <BAS_L JPN_L>; bindings = <&je JP_DOT>;   };
+    cmb_comma { key-positions = <15 24>; layers = <BAS_L JPN_L>; bindings = <&je JP_COMMA>; };
+    cmb_hash  { key-positions = <10 11>; layers = <BAS_L JPN_L>; bindings = <&je JP_HASH>;  };
+    cmb_pipe  { key-positions = <20 21>; layers = <BAS_L JPN_L>; bindings = <&je JP_PIPE>;  };
+    cmb_amps  { key-positions = <22 23>; layers = <BAS_L JPN_L>; bindings = <&je JP_AMPS>;  };
 
-    cmb_int5_esc {
-      key-positions = <14 15>;
-      layers = <BAS_L>;
-      bindings = <&macro_int5_esc>;
-    };
-    cmb_enter {
-      key-positions = <14 16>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&kp ENTER>;
-    };
-    cmb_under {
-      key-positions = <23 24>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&je JP_UNDER>;
-    };
-    cmb_dot {
-      key-positions = <6 16>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&je JP_DOT>;
-    };
-    cmb_comma {
-      key-positions = <15 24>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&je JP_COMMA>;
-    };
-    cmb_hash {
-      key-positions = <10 11>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&je JP_HASH>;
-    };
-    cmb_pipe {
-      key-positions = <20 21>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&je JP_PIPE>;
-    };
-    cmb_amps {
-      key-positions = <22 23>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&je JP_AMPS>;
-    };
+    cmb_esc   { key-positions = <14 15>; layers = <JPN_L PAD_L>; bindings = <&kp ESC>;      };
+    cmb_bs    { key-positions = <10 13>; layers = <BAS_L JPN_L>; bindings = <&kp BSPC>;     };
+    cmb_del   { key-positions = <12 15>; layers = <BAS_L JPN_L>; bindings = <&kp DEL>;      };
 
-    cmb_esc {
-      key-positions = <14 15>;
-      layers = <JPN_L PAD_L>;
-      bindings = <&kp ESC>;
-    };
-    cmb_bs {
-      key-positions = <10 13>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&kp BSPC>;
-    };
-    cmb_del {
-      key-positions = <12 15>;
-      layers = <BAS_L JPN_L>;
-      bindings = <&kp DEL>;
-    };
-
-
-    combo_send_exit {
-      key-positions = <8 19>;
-      bindings = <&macro_send_exit>;
-      layers = <BAS_L>;
-    };
-    combo_wqa {
-      key-positions = <8 18>;
-      bindings = <&macro_wqa>;
-      layers = <BAS_L>;
-    };
+    cmb_int5_esc { key-positions = <14 15>; layers = <BAS_L>; bindings = <&macro_int5_esc>; };
+    combo_send_exit { key-positions = <8 19>; bindings = <&macro_send_exit>; layers = <BAS_L>; };
+    combo_send_wqa  { key-positions = <8 18>; bindings = <&macro_wqa>; layers = <BAS_L>; };
 
   };
 
