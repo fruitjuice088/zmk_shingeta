@@ -195,7 +195,7 @@
       bindings = <
                    &msc SCRL_LEFT &msc SCRL_RIGHT XXX          XXX               &msc SCRL_UP  &mkp MB4      &mmv MOVE_UP  &mkp MB5
         XXX           &kp LSHFT     &kp LCTRL     &kp LALT     XXX               &msc SCRL_DOWN &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT XXX
-        &lt OPT_L ESC &kp F22       &kp F24       &kp F23                                      &kp F22      &kp F24        &kp F23       &lt OPT_L ESC
+        &lt OPT_L ESC &kp F18       &kp F20       &kp F19                                      &kp F18      &kp F20        &kp F19       &lt OPT_L ESC
                                                   &mkp MB3     &kp LSHFT         &mkp MB1      &mkp MB2
       >;
     };
