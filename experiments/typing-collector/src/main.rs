@@ -87,7 +87,7 @@ fn host_name() -> String {
 }
 
 fn print_usage() {
-    println!("usage: typing-collector [--verbose] [--data-dir PATH");
+    println!("usage: typing-collector [--verbose] [--data-dir PATH]");
 }
 
 fn parse_cli() -> CliOptions {
@@ -133,6 +133,9 @@ fn modifier_key_for_event_type(event_type: &EventType) -> Option<ModifierKey> {
         EventType::KeyPress(Key::ControlLeft) | EventType::KeyRelease(Key::ControlLeft) => {
             Some(ModifierKey::Ctrl)
         }
+        EventType::KeyPress(Key::ControlRight) | EventType::KeyRelease(Key::ControlRight) => {
+            Some(ModifierKey::Ctrl)
+        }
         EventType::KeyPress(Key::Unknown(62)) | EventType::KeyRelease(Key::Unknown(62)) => {
             Some(ModifierKey::Ctrl)
         }
@@ -158,6 +161,7 @@ fn is_modifier_key(key: Key) -> bool {
         Key::ShiftLeft
             | Key::ShiftRight
             | Key::ControlLeft
+            | Key::ControlRight
             | Key::Unknown(62)
             | Key::Alt
             | Key::AltGr
