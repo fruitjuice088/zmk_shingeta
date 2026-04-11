@@ -1,7 +1,7 @@
 use std::fs::{self, OpenOptions};
 use std::io::{self, Write};
 use std::path::{Path, PathBuf};
-use std::sync::{LazyLock, Mutex, OnceLock};
+use std::sync::{LazyLock, Mutex};
 
 use rdev::{listen, Event, EventType, Key};
 use serde::Serialize;
@@ -48,7 +48,6 @@ struct ModifierState {
 struct CliOptions {
     verbose: bool,
     data_dir: PathBuf,
-    windows_hook_debug: bool,
 }
 
 impl ModifierState {
@@ -94,7 +93,6 @@ fn print_usage() {
 fn parse_cli() -> CliOptions {
     let mut verbose = false;
     let mut data_dir = PathBuf::from("data");
-    let mut windows_hook_debug = false;
 
     let mut args = std::env::args().skip(1);
 
@@ -109,7 +107,6 @@ fn parse_cli() -> CliOptions {
                 };
                 data_dir = PathBuf::from(path);
             }
-            "--windows-hook-debug" => windows_hook_debug = true,
             "-h" | "--help" => {
                 print_usage();
                 std::process::exit(0);
@@ -122,7 +119,7 @@ fn parse_cli() -> CliOptions {
         }
     }
 
-    CliOptions { verbose, data_dir, windows_hook_debug }
+    CliOptions { verbose, data_dir }
 }
 
 fn modifier_key_for_event_type(event_type: &EventType) -> Option<ModifierKey> {
@@ -298,6 +295,27 @@ fn captured_event_from_rdev(event: Event, now: &OffsetDateTime) -> Option<Captur
     })
 }
 
+fn persist_captured_event(
+    now: &OffsetDateTime,
+    data_dir: &Path,
+    verbose: bool,
+    captured: &CapturedEvent,
+) {
+    let path = daily_log_path(now, data_dir);
+
+    if let Err(error) = append_event(&path, captured) {
+        eprintln!("append error: {error}");
+        return;
+    }
+
+    if verbose {
+        println!(
+            "logged kind={:?} raw_key={} mods={:?} resolved_text={:?}",
+            captured.kind, captured.raw_key, captured.mods, captured.resolved_text
+        );
+    }
+}
+
 fn callback(event: Event, options: &CliOptions) {
     update_modifier_state(&event);
 
@@ -307,24 +325,14 @@ fn callback(event: Event, options: &CliOptions) {
         return;
     };
 
-    let path = daily_log_path(&now, &options.data_dir);
-
-    if let Err(error) = append_event(&path, &captured) {
-        eprintln!("append error: {error}");
-        return;
-    }
-
-    if options.verbose {
-        println!(
-            "logged kind={:?} raw_key={} mods={:?} resolved_text={:?}",
-            captured.kind, captured.raw_key, captured.mods, captured.resolved_text
-        );
-    }
+    persist_captured_event(&now, &options.data_dir, options.verbose, &captured);
 }
 
 #[cfg(target_os = "windows")]
-mod windows_hook_debug {
+mod windows_native {
+    use std::path::PathBuf;
     use std::ptr::null;
+    use std::sync::OnceLock;
 
     use windows_sys::Win32::Foundation::{HINSTANCE, LPARAM, LRESULT, WPARAM};
     use windows_sys::Win32::System::LibraryLoader::GetModuleHandleW;
@@ -337,6 +345,49 @@ mod windows_hook_debug {
         TranslateMessage, UnhookWindowsHookEx, HC_ACTION, HHOOK, LLKHF_INJECTED, WH_KEYBOARD_LL,
         WM_KEYDOWN, WM_KEYUP, WM_SYSKEYDOWN, WM_SYSKEYUP,
     };
+
+    #[derive(Debug, Clone)]
+    struct HookRuntime {
+        verbose: bool,
+        data_dir: PathBuf,
+    }
+
+    static RUNTIME: OnceLock<HookRuntime> = OnceLock::new();
+
+    fn runtime() -> &'static HookRuntime {
+        RUNTIME
+            .get()
+            .expect("windows native runtime should be initialized")
+    }
+
+    pub fn run(options: &super::CliOptions) {
+        let _ = RUNTIME.set(HookRuntime {
+            verbose: options.verbose,
+            data_dir: options.data_dir.clone(),
+        });
+
+        unsafe {
+            let instance: HINSTANCE = GetModuleHandleW(null());
+            let hook = SetWindowsHookExW(WH_KEYBOARD_LL, Some(hook_proc), instance, 0);
+
+            if hook.is_null() {
+                eprintln!("failed to install WH_KEYBOARD_LL hook");
+                std::process::exit(1);
+            }
+
+            println!("starting windows native listener");
+            println!("logging to {}", runtime().data_dir.display());
+            println!("press Ctrl-C to stop");
+
+            let mut message = MSG::default();
+            while GetMessageW(&mut message, std::ptr::null_mut(), 0, 0) > 0 {
+                TranslateMessage(&message);
+                DispatchMessageW(&message);
+            }
+
+            UnhookWindowsHookEx(hook);
+        }
+    }
 
     fn modifier_key_for_vk(vk_code: u32) -> Option<super::ModifierKey> {
         match vk_code {
@@ -355,6 +406,10 @@ mod windows_hook_debug {
             x if x == VK_LWIN as u32 || x == VK_RWIN as u32 => Some(super::ModifierKey::Meta),
             _ => None,
         }
+    }
+
+    fn is_modifier_vk(vk_code: u32) -> bool {
+        modifier_key_for_vk(vk_code).is_some()
     }
 
     fn update_modifier_state_from_vk(vk_code: u32, pressed: bool) {
@@ -424,26 +479,23 @@ mod windows_hook_debug {
         super::normalize_printable_name(Some(text))
     }
 
-    pub fn run() {
-        unsafe {
-            let instance: HINSTANCE = GetModuleHandleW(null());
-            let hook = SetWindowsHookExW(WH_KEYBOARD_LL, Some(hook_proc), instance, 0);
-
-            if hook.is_null() {
-                eprintln!("failed to install WH_KEYBOARD_LL hook");
-                std::process::exit(1);
+    fn raw_key_name(vk_code: u32) -> String {
+        match vk_code {
+            0x41..=0x5A => {
+                let ch = char::from_u32(vk_code).expect("valid ascii letter");
+                format!("Key{ch}")
             }
-
-            println!("windows hook debug started");
-            println!("press Ctrl-C to stop");
-
-            let mut message = MSG::default();
-            while GetMessageW(&mut message, std::ptr::null_mut(), 0, 0) > 0 {
-                TranslateMessage(&message);
-                DispatchMessageW(&message);
+            0x30..=0x39 => {
+                let ch = char::from_u32(vk_code).expect("valid ascii digit");
+                format!("Digit{ch}")
             }
-
-            UnhookWindowsHookEx(hook);
+            0x08 => "Backspace".to_string(),
+            0x09 => "Tab".to_string(),
+            0x0D => "Return".to_string(),
+            0x1B => "Escape".to_string(),
+            0x20 => "Space".to_string(),
+            0x08 => "Backspace".to_string(),
+            _ => format!("VkCode({vk_code})"),
         }
     }
 
@@ -463,52 +515,66 @@ mod windows_hook_debug {
         let keyboard = *(lparam as *const KBDLLHOOKSTRUCT);
         let injected = (keyboard.flags & LLKHF_INJECTED) != 0;
 
-        if injected {
+        if !injected {
             return CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam);
         }
 
         update_modifier_state_from_vk(keyboard.vkCode, keydown);
 
-        if keyup || modifier_key_for_vk(keyboard.vkCode).is_some() {
+        if keyup || is_modifier_vk(keyboard.vkCode) {
             return CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam);
         }
 
         let mods = super::current_mods();
+        let has_shortcut_modifiers = super::has_shortcut_modifiers(&mods);
+        let resolved_text = if has_shortcut_modifiers {
+            None
+        } else {
+            resolve_text(keyboard.vkCode, keyboard.scanCode)
+        };
 
-        if super::has_shortcut_modifiers(&mods) {
-            println!(
-                "native kind=control vk_code={} scan_code={} mods={:?} resolved_text=None",
-                keyboard.vkCode, keyboard.scanCode, mods
-            );
-
+        if !has_shortcut_modifiers && resolved_text.is_none() {
             return CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam);
         }
 
-        let Some(text) = resolve_text(keyboard.vkCode, keyboard.scanCode) else {
-            return CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam);
+        let now = super::now_local();
+        let captured = super::CapturedEvent {
+            ts: now
+                .format(&super::Rfc3339)
+                .expect("failed to format timestamp"),
+            host: super::host_name(),
+            os: std::env::consts::OS.to_string(),
+            app: super::current_app(),
+            raw_key: raw_key_name(keyboard.vkCode),
+            mods,
+            resolved_text,
+            kind: if has_shortcut_modifiers {
+                super::EventKind::Control
+            } else {
+                super::EventKind::Printable
+            },
         };
 
-        println!(
-            "native kind=printable vk_code={} scan_code={} mods={:?} resolved_text={:?}",
-            keyboard.vkCode, keyboard.scanCode, mods, text
-        );
+        super::persist_captured_event(&now, &runtime().data_dir, runtime().verbose, &captured);
 
         CallNextHookEx(std::ptr::null_mut(), code, wparam, lparam)
     }
 }
 
 #[cfg(not(target_os = "windows"))]
-mod windows_hook_debug {
-    pub fn run() {
-        eprintln!("windows hook debug is only supported on Windows");
+mod windows_native {
+    pub fn run(_options: &super::CliOptions) {
+        eprintln!("windows native is only supported on Windows");
         std::process::exit(2);
     }
 }
 
 fn main() {
     let options = parse_cli();
-    if options.windows_hook_debug {
-        windows_hook_debug::run();
+
+    #[cfg(target_os = "windows")]
+    {
+        windows_native::run(&options);
         return;
     }
 
