@@ -44,6 +44,12 @@ struct ModifierState {
     meta: bool,
 }
 
+#[derive(Debug, Clone)]
+struct CliOptions {
+    verbose: bool,
+    data_dir: PathBuf,
+}
+
 impl ModifierState {
     fn to_vec(&self) -> Vec<String> {
         let mut mods = Vec::new();
@@ -78,6 +84,42 @@ fn host_name() -> String {
         .and_then(|name| name.into_string().ok())
         .filter(|name| !name.is_empty())
         .unwrap_or_else(|| "unknown".to_string())
+}
+
+fn print_usage() {
+    println!("usage: typing-collector [--verbose] [--data-dir PATH");
+}
+
+fn parse_cli() -> CliOptions {
+    let mut verbose = false;
+    let mut data_dir = PathBuf::from("data");
+
+    let mut args = std::env::args().skip(1);
+
+    while let Some(arg) = args.next() {
+        match arg.as_str() {
+            "--verbose" => verbose = true,
+            "--data-dir" => {
+                let Some(path) = args.next() else {
+                    eprintln!("missing value for --data-dir");
+                    print_usage();
+                    std::process::exit(2);
+                };
+                data_dir = PathBuf::from(path);
+            }
+            "-h" | "--help" => {
+                print_usage();
+                std::process::exit(0);
+            }
+            _ => {
+                eprintln!("unknown argument: {arg}");
+                print_usage();
+                std::process::exit(2);
+            }
+        }
+    }
+
+    CliOptions { verbose, data_dir }
 }
 
 fn modifier_key_for_event_type(event_type: &EventType) -> Option<ModifierKey> {
@@ -177,11 +219,11 @@ fn current_app() -> String {
     "unknown".to_string()
 }
 
-fn daily_log_path(now: &OffsetDateTime) -> PathBuf {
+fn daily_log_path(now: &OffsetDateTime, data_dir: &Path) -> PathBuf {
     let day = now
         .format(&format_description!("[year]-[month]-[day]"))
         .expect("failed to format date");
-    PathBuf::from("data").join(format!("events-{day}.jsonl"))
+    data_dir.join(format!("events-{day}.jsonl"))
 }
 
 fn append_event(path: &Path, event: &CapturedEvent) -> io::Result<()> {
@@ -249,7 +291,7 @@ fn captured_event_from_rdev(event: Event, now: &OffsetDateTime) -> Option<Captur
     })
 }
 
-fn callback(event: Event) {
+fn callback(event: Event, options: &CliOptions) {
     update_modifier_state(&event);
 
     let now = now_local();
@@ -258,24 +300,29 @@ fn callback(event: Event) {
         return;
     };
 
-    let path = daily_log_path(&now);
+    let path = daily_log_path(&now, &options.data_dir);
 
     if let Err(error) = append_event(&path, &captured) {
         eprintln!("append error: {error}");
         return;
     }
 
-    println!(
-        "logged kind={:?} raw_key={} mods={:?} resolved_text={:?}",
-        captured.kind, captured.raw_key, captured.mods, captured.resolved_text
-    );
+    if options.verbose {
+        println!(
+            "logged kind={:?} raw_key={} mods={:?} resolved_text={:?}",
+            captured.kind, captured.raw_key, captured.mods, captured.resolved_text
+        );
+    }
 }
 
 fn main() {
+    let options = parse_cli();
+
     println!("starting listener");
+    println!("logging to {}", options.data_dir.display());
     println!("press Ctrl-C to stop");
 
-    if let Err(error) = listen(callback) {
+    if let Err(error) = listen(move |event| callback(event, &options)) {
         eprintln!("listen error: {error:?}");
     }
 }
