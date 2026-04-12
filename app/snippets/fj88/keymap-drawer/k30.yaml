@@ -1,0 +1,253 @@
+layout: {cols_thumbs_notation: 2vv3332+2 2+23332vv}
+layers:
+  BASE:
+  - P
+  - U
+  - O
+  - Y
+  - W
+  - E
+  - K
+  - F
+  - {t: G, h: Ctl+LSHFT}
+  - {t: I, h: LSHFT}
+  - {t: A, h: LCTRL}
+  - {t: D, h: LALT}
+  - {t: C, h: LGUI}
+  - {t: T, h: RGUI}
+  - {t: H, h: RALT}
+  - {t: J, h: RCTRL}
+  - {t: L, h: RSHFT}
+  - {t: S, h: Ctl+LSHFT}
+  - {t: Z, h: MSE}
+  - X
+  - {t: V, h: FUNC}
+  - ','
+  - B
+  - {t: M, h: FUNC}
+  - R
+  - {t: N, h: MSE}
+  - {t: BSPC, h: PAD}
+  - {t: SPACE, h: LSHFT}
+  - ENTER
+  - {t: TAB, h: SYM}
+  JPN:
+  - P
+  - U
+  - O
+  - Y
+  - W
+  - E
+  - K
+  - F
+  - {t: G, h: Ctl+LSHFT}
+  - {t: I, h: LSHFT}
+  - {t: A, h: LCTRL}
+  - {t: D, h: LALT}
+  - {t: C, h: LGUI}
+  - {t: T, h: RGUI}
+  - {t: H, h: RALT}
+  - {t: J, h: RCTRL}
+  - {t: L, h: RSHFT}
+  - {t: S, h: Ctl+LSHFT}
+  - {t: Z, h: MSE}
+  - X
+  - V
+  - ','
+  - B
+  - M
+  - R
+  - {t: N, h: MSE}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - ''
+  - ENTER
+  PAD:
+  - '1'
+  - '2'
+  - '3'
+  - .
+  - PG UP
+  - ':'
+  - UP
+  - /
+  - '0'
+  - {t: '4', h: LSFT}
+  - {t: '5', h: LCTRL}
+  - {t: '6', h: LALT}
+  - '#'
+  - PG DN
+  - LEFT
+  - DOWN
+  - RIGHT
+  - '!'
+  - '%'
+  - '7'
+  - {t: '8', h: FUNC}
+  - '9'
+  - HOME
+  - ;
+  - END
+  - '?'
+  - {type: held}
+  - {t: ▽, type: trans}
+  - ENTER
+  - DEL
+  SYM:
+  - '['
+  - '"'
+  - ']'
+  - '&'
+  - ^
+  - <
+  - '='
+  - '>'
+  - '@'
+  - (
+  - ''''
+  - )
+  - '|'
+  - $
+  - +
+  - '*'
+  - '-'
+  - /
+  - \
+  - '{'
+  - '`'
+  - '}'
+  - '|'
+  - '&'
+  - '~'
+  - YEN
+  - BSPC
+  - {t: SPACE, h: LSHFT}
+  - {t: ▽, type: trans}
+  - {type: held}
+  FUNC:
+  - F2
+  - F3
+  - F4
+  - F5
+  - VOL UP
+  - ''
+  - ''
+  - ''
+  - F6
+  - {t: F7, h: LSHFT}
+  - {t: F8, h: LCTRL}
+  - {t: F9, h: LALT}
+  - F10
+  - VOL DN
+  - RALT
+  - RCTRL
+  - RSHFT
+  - BRI UP
+  - F11
+  - F12
+  - {t: INT5, type: held}
+  - APP
+  - ''
+  - INT4
+  - ''
+  - BRI DN
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  - {t: ▽, type: trans}
+  MSE:
+  - {t: '$$mdi:mouse-scroll-wheel$$', s: '$$mdi:arrow-left-thin$$', type: text_with_symbol}
+  - {t: '$$mdi:mouse-scroll-wheel$$', s: '$$mdi:arrow-right-thin$$', type: text_with_symbol}
+  - ''
+  - ''
+  - {t: '$$mdi:mouse-scroll-wheel$$', s: '$$mdi:arrow-up-thin$$', type: text_with_symbol}
+  - AC BACK
+  - {t: '$$mdi:mouse-outline$$', s: '$$mdi:arrow-up$$', type: text_with_symbol}
+  - AC FORWARD
+  - ''
+  - LSHFT
+  - LCTRL
+  - LALT
+  - ''
+  - {t: '$$mdi:mouse-scroll-wheel$$', s: '$$mdi:arrow-down-thin$$', type: text_with_symbol}
+  - {t: '$$mdi:mouse-outline$$', s: '$$mdi:arrow-left$$', type: text_with_symbol}
+  - {t: '$$mdi:mouse-outline$$', s: '$$mdi:arrow-down$$', type: text_with_symbol}
+  - {t: '$$mdi:mouse-outline$$', s: '$$mdi:arrow-right$$', type: text_with_symbol}
+  - ''
+  - {t: ESC, h: OPT, type: held}
+  - F22
+  - F24
+  - F23
+  - F22
+  - F24
+  - F23
+  - {t: ESC, h: OPT}
+  - {t: '$$mdi:cursor-default-click-outline$$', s: '3', type: text_with_symbol}
+  - LSHFT
+  - {t: '$$mdi:cursor-default-click-outline$$', s: '1', type: text_with_symbol}
+  - {t: '$$mdi:cursor-default-click-outline$$', s: '2', type: text_with_symbol}
+  OPT:
+  - ''
+  - ''
+  - ''
+  - '&bootloader'
+  - '&bootloader'
+  - ''
+  - ''
+  - ''
+  - {t: '$$mdi:bluetooth$$', s: '$$mdi:close-thick$$', type: text_with_symbol}
+  - OUT TOG
+  - ''
+  - ''
+  - ''
+  - {t: '$$mdi:bluetooth-connect$$', s: '0', type: text_with_symbol}
+  - {t: '$$mdi:bluetooth-connect$$', s: '1', type: text_with_symbol}
+  - {t: '$$mdi:bluetooth-connect$$', s: '2', type: text_with_symbol}
+  - {t: '$$mdi:bluetooth-connect$$', s: '3', type: text_with_symbol}
+  - {t: '$$mdi:bluetooth-connect$$', s: '4', type: text_with_symbol}
+  - {type: held}
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+  - ''
+combos:
+- p: [0, 1]
+  k: Q
+  l: [BASE, JPN]
+- p: [15, 16]
+  k: N
+  l: [BASE, JPN]
+- p: [0, 2]
+  k: Sft+TAB
+  l: [BASE, JPN]
+- p: [9, 11]
+  k: TAB
+  l: [BASE, JPN]
+- p: [10, 11]
+  k: DEL
+  l: [BASE, JPN]
+- p: [14, 15]
+  k: _ESC
+  l: [BASE]
+- p: [14, 16]
+  k: ENTER
+  l: [BASE, JPN]
+- p: [23, 24]
+  k: _
+  l: [BASE, JPN]
+- p: [6, 16]
+  k: .
+  l: [BASE, JPN]
+- p: [14, 15]
+  k: ESC
+  l: [JPN, PAD]
+- p: [8, 19]
+  k: '"exit"'
+  l: [BASE]

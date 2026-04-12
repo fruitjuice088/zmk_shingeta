@@ -1,0 +1,259 @@
+# https://keymap-drawer.streamlit.app/
+layout: {cols_thumbs_notation: 2vv3332+2 2+23332vv}
+layers:
+  BASE:
+    - [L, U, F, ',',  G, W, R, Y]
+
+    - {t: E, h: Ctl+LSHFT}
+    - {t: I, h: LSFT}
+    - {t: A, h: LCTRL}
+    - {t: O, h: LALT}
+    - {t: '-', h: $$mdi:microsoft-windows$$}
+    - {t: K, h: $$mdi:microsoft-windows$$}
+    - {t: T, h: RALT}
+    - {t: N, h: RCTRL}
+    - {t: S, h: RSFT}
+    - {t: H, h: Ctl+RSHFT}
+
+    - {t: Z, h: MSE}
+    - X
+    - {t: C, h: FUNC}
+    - V
+    - D
+    - {t: M, h: FUNC}
+    - J
+    - {t: B, h: MSE}
+
+    - {t: $$mdi:backspace$$, h: PAD}
+    - {t: $$mdi:keyboard-space$$, h: Shift}
+    - {t: $$mdi:keyboard-return$$, h: JPN}
+    - {t: $$mdi:keyboard-tab$$, h: SYM}
+  JPN:
+    - '&je L'
+    - '&je U'
+    - '&je Y'
+    - '&je ,'
+    - '&je G'
+    - '&je W'
+    - '&je R'
+    - '&je Y'
+
+    - '&je E'
+    - '&je I'
+    - '&je A'
+    - '&je O'
+    - '&je -'
+    - '&je K'
+    - '&je T'
+    - '&je N'
+    - '&je S'
+    - '&je H'
+
+    - {t: '&je Z', h: MSE}
+    - '&je X'
+    - '&je C'
+    - '&je V'
+    - '&je D'
+    - '&je M'
+    - '&je J'
+    - {t: '&je B', h: MSE}
+
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+    - {type: held}
+    - {t: ▽, type: trans}
+  PAD:
+    - 1
+    - 2
+    - 3
+    - ';'
+    - ':'
+    - '~'
+    - '_'
+    - '/'
+
+    - 0
+    - {t: 4, h: LSIFT}
+    - {t: 5, h: LCTRL}
+    - {t: 6, h: LALT}
+    - '.'
+    - $$mdi:arrow-left$$
+    - $$mdi:arrow-down$$
+    - $$mdi:arrow-up$$
+    - $$mdi:arrow-right$$
+    - '!'
+
+    - '%'
+    - 7
+    - 8
+    - 9
+    - HOME
+    - '#'
+    - END
+    - '?'
+
+    - {type: held}
+    - Sft+Space
+    - $$mdi:keyboard-return$$
+    - Del
+  SYM:
+    - '['
+    - '"'
+    - ']'
+    - '&'
+    - ^
+    - '<'
+    - '='
+    - '>'
+
+    - '@'
+    - '('
+    - "'"
+    - ')'
+    - '|'
+    - '$'
+    - +
+    - '*'
+    - '-'
+    - ''
+
+    - '\'
+    - '{'
+    - '`'
+    - '}'
+    - '|'
+    - '&'
+    - ''
+    - ''
+
+    - $$mdi:backspace$$
+    - {t: $$mdi:keyboard-space$$, h: Shift}
+    - {t: ▽, type: trans}
+    - {type: held}
+
+  FUNC:
+    - F2
+    - F3
+    - F4
+    - F5
+    - $$mdi:volume-plus$$
+    - 'PgUp'
+    - ''
+    - ''
+    
+    - F6
+    - {t: F7, h: LSHFT}
+    - {t: F8, h: LCTRL}
+    - {t: F9, h: LALT}
+    - F10
+    - $$mdi:volume-minus$$
+    - LALT
+    - LCTRL
+    - LSHFT
+    - $$phosphor:bold/sun$$
+
+    - F11
+    - F12
+    - {t: INT5, type: held}
+    - APP
+    - 'PgDn'
+    - {t: INT4, type: held}
+    - ''
+    - $$phosphor:bold/sun-dim$$
+
+    - {t: ▽, type: trans}
+    - {t: $$mdi:keyboard-space$$, h: Shift}
+    - {t: ▽, type: trans}
+    - {t: ▽, type: trans}
+
+  MSE:
+    - {t: '$$mdi:mouse-scroll-wheel$$', s: '$$mdi:arrow-left-thin$$', type: text_with_symbol}
+    - {t: '$$mdi:mouse-scroll-wheel$$', s: '$$mdi:arrow-right-thin$$', type: text_with_symbol}
+    - ''
+    - ''
+    - {t: '$$mdi:mouse-scroll-wheel$$', s: '$$mdi:arrow-up-thin$$', type: text_with_symbol}
+    - {t: '$$mdi:cursor-default-click-outline$$', s: 1, type: text_with_symbol}
+    - {t: '$$mdi:mouse-outline$$', s: '$$mdi:arrow-up$$', type: text_with_symbol}
+    - {t: '$$mdi:cursor-default-click-outline$$', s: 2, type: text_with_symbol}
+
+    - ''
+    - LSHFT
+    - LCTRL
+    - LALT
+    - ''
+    - {t: '$$mdi:mouse-scroll-wheel$$', s: '$$mdi:arrow-down-thin$$', type: text_with_symbol}
+    - {t: '$$mdi:mouse-outline$$', s: '$$mdi:arrow-left$$', type: text_with_symbol}
+    - {t: '$$mdi:mouse-outline$$', s: '$$mdi:arrow-down$$', type: text_with_symbol}
+    - {t: '$$mdi:mouse-outline$$', s: '$$mdi:arrow-right$$', type: text_with_symbol}
+    - ''
+
+    - {t: ESC, h: OPT, type: held}
+    - F22
+    - F24
+    - F23
+    - F22
+    - F24
+    - F23
+    - {t: ESC, h: OPT, type: held}
+
+    - {t: '$$mdi:cursor-default-click-outline$$', s: 3, type: text_with_symbol}
+    - LSHFT
+    - {t: '$$mdi:cursor-default-click-outline$$', s: 1, type: text_with_symbol}
+    - {t: '$$mdi:cursor-default-click-outline$$', s: 2, type: text_with_symbol}
+
+  OPT:
+    - ''
+    - ''
+    - ''
+    - '&bootloader'
+    - '&bootloader'
+    - ''
+    - ''
+    - ''
+
+
+    - {t: '$$mdi:bluetooth$$', s: '$$mdi:close-thick$$', type: text_with_symbol}
+    - ''
+    - ''
+    - ''
+    - ''
+    - {t: '$$mdi:bluetooth-connect$$', s: '0', type: text_with_symbol}
+    - {t: '$$mdi:bluetooth-connect$$', s: '1', type: text_with_symbol}
+    - {t: '$$mdi:bluetooth-connect$$', s: '2', type: text_with_symbol}
+    - {t: '$$mdi:bluetooth-connect$$', s: '3', type: text_with_symbol}
+    - {t: '$$mdi:bluetooth-connect$$', s: '4', type: text_with_symbol}
+
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+    - ''
+
+    - ''
+    - ''
+    - ''
+    - ''
+combos:
+  - {p: [0, 1], k: '&je Q', l: [BASE, JPN]}
+  - {p: [6, 7], k: '&je P', l: [BASE, JPN]}
+
+  - {p: [9, 11], k: Tab, l: [BASE, JPN], a: top}
+  - {p: [10, 11], k: Del, l: [BASE, JPN]}
+
+  - {p: [9, 10], k: '*', l: [PAD]}
+  - {p: [10, 11], k: '/', l: [PAD]}
+  - {p: [19, 20], k: '+', l: [PAD]}
+  - {p: [20, 21], k: '-', l: [PAD]}
+
+  - {p: [4, 5], k: '+', l: [PAD]}
+  - {p: [5, 6], k: '-', l: [PAD]}
+  - {p: [6, 7], k: '*', l: [PAD]}
+
+  - {p: [14, 16], k: Enter, l: [JPN], a: top}
+  - {p: [14, 15], k: _ESC, l: [BASE, PAD]}
+  - {p: [14, 15], k: ESC, l: [JPN]}
+  - {p: [8, 19], k: '"exit"', l: [BASE]}
+  - {p: [23, 24], k: '_', l: [BASE, JPN]}
