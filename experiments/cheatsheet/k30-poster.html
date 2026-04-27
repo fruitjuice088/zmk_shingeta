@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>k30 Keymap Poster</title>
+<style>
+  :root {
+    --bg: #1a1b20;
+    --panel: #24262d;
+    --panel-2: #2c2f38;
+    --border: #3a3d46;
+    --text: #e6e7eb;
+    --muted: #9aa0ad;
+    --accent: #7cc5ff;
+    --accent-2: #ffb86b;
+    --hit: #ffd166;
+    --hit-fg: #1a1b20;
+    --key-bg: #353841;
+    --key-border: #4a4e58;
+    --trans: #23242a;
+    --held: #5a3838;
+  }
+  body.light {
+    --bg: #f6f7f9;
+    --panel: #ffffff;
+    --panel-2: #eef0f3;
+    --border: #c8ccd3;
+    --text: #1f2430;
+    --muted: #5a6070;
+    --accent: #1a73e8;
+    --accent-2: #c0690c;
+    --hit: #ffd166;
+    --hit-fg: #1f2430;
+    --key-bg: #ffffff;
+    --key-border: #b8bdc6;
+    --trans: #ececef;
+    --held: #f3d4d4;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif; }
+
+  /* Controls */
+  .ctrl { position: fixed; top: 8px; right: 8px; display: flex; gap: 6px; z-index: 100; }
+  .ctrl button { background: var(--panel); border: 1px solid var(--border); color: var(--text); padding: 4px 10px; font-size: 11px; border-radius: 4px; cursor: pointer; }
+  .ctrl button:hover { background: var(--hit); color: var(--hit-fg); }
+  @media print { .ctrl { display: none; } }
+
+  /* Sheet */
+  .sheet {
+    width: 297mm;
+    height: 210mm;
+    margin: 12px auto;
+    padding: 6mm 7mm;
+    background: var(--bg);
+    display: grid;
+    grid-template-columns: 105mm 1fr;
+    grid-template-rows: auto 1fr;
+    column-gap: 5mm;
+    row-gap: 3mm;
+    overflow: hidden;
+  }
+  .sheet.ratio-16x9 { width: 1600px; height: 900px; }
+  .sheet.ratio-3x2 { width: 1500px; height: 1000px; }
+
+  .title { grid-column: 1 / -1; display: flex; align-items: baseline; gap: 10px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+  .title h1 { margin: 0; font-size: 14px; letter-spacing: .04em; color: var(--accent); }
+  .title .sub { color: var(--muted); font-size: 10px; }
+  .title .legend { margin-left: auto; font-size: 9px; color: var(--muted); display: flex; gap: 10px; align-items: center; }
+  .title .sw { display: inline-block; width: 9px; height: 9px; border-radius: 2px; border: 1px solid var(--border); vertical-align: middle; margin-right: 3px; }
+
+  .layers { display: flex; flex-direction: column; gap: 3mm; min-height: 0; }
+  .layer { background: var(--panel); border: 1px solid var(--border); border-radius: 4px; padding: 3mm; flex: 1; display: flex; flex-direction: column; justify-content: center; min-height: 0; }
+  .layer h2 { margin: 0 0 1.5mm; font-size: 10px; letter-spacing: .05em; color: var(--accent); display: flex; gap: 6px; align-items: baseline; }
+  .layer h2 .desc { color: var(--muted); font-weight: 400; font-size: 8.5px; }
+  .kb { width: 100%; }
+  .kb svg { width: 100%; height: auto; display: block; }
+
+  .k-rect { fill: var(--key-bg); stroke: var(--key-border); stroke-width: 1; }
+  .k-rect.trans { fill: var(--trans); }
+  .k-rect.held  { fill: var(--held); }
+  .k-rect.none  { fill: transparent; stroke-dasharray: 3 3; stroke: var(--border); }
+  .k-tap { font: 600 13px -apple-system, BlinkMacSystemFont, sans-serif; fill: var(--text); text-anchor: middle; dominant-baseline: middle; }
+  .k-hold { font: 500 8.5px -apple-system, BlinkMacSystemFont, sans-serif; fill: var(--muted); text-anchor: middle; dominant-baseline: middle; }
+  .k-tap.small { font-size: 9px; }
+  .k-tap.macro { fill: var(--accent-2); font-weight: 700; font-size: 8.5px; }
+
+  /* Combo panel */
+  .combos { background: var(--panel); border: 1px solid var(--border); border-radius: 4px; padding: 3mm; overflow: hidden; display: flex; flex-direction: column; min-height: 0; }
+  .combos h2 { margin: 0 0 1.5mm; font-size: 10px; letter-spacing: .05em; color: var(--accent); }
+  .combo-sections {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1mm 1.5mm;
+    align-content: flex-start;
+    flex: 1;
+    min-height: 0;
+  }
+  .combo-sections h3 {
+    flex: 1 0 100%;
+    margin: 1.5mm 0 0.5mm;
+    font-size: 8.5px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    border-bottom: 1px dashed var(--border);
+    padding-bottom: 1px;
+  }
+  .combo-sections h3:first-child { margin-top: 0; }
+
+  .pair { display: flex; gap: 1mm; flex: 0 0 auto; }
+
+  .combo {
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    padding: 1mm 1.5mm;
+    display: grid;
+    grid-template-columns: max-content max-content;
+    grid-template-rows: auto auto;
+    column-gap: 2mm;
+    row-gap: 0;
+    align-items: center;
+    flex: 0 0 auto;
+    line-height: 1.15;
+  }
+  .combo .out { grid-column: 1; grid-row: 1; font-weight: 700; font-family: "SFMono-Regular", Menlo, Consolas, monospace; font-size: 13px; color: var(--accent-2); }
+  .combo .out.wide { font-size: 11px; }
+  .combo .note { grid-column: 1; grid-row: 2; font-size: 8px; color: var(--muted); white-space: nowrap; }
+  .combo .mini-kb { grid-column: 2; grid-row: 1 / 3; width: 20mm; height: auto; }
+  .mini-rect { fill: var(--key-bg); stroke: var(--key-border); stroke-width: 0.8; }
+  .mini-rect.hit { fill: var(--hit); stroke: var(--hit-fg); stroke-width: 1.5; }
+
+  /* Preserve on-screen Dark/Light state when printing (Dark prints Dark, Light prints Light) */
+  html, body, .sheet, .layer, .combos, .combo, .pair, .title, svg, rect, text {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  @media print {
+    body { padding: 0; display: block; }
+    .sheet { margin: 0; box-shadow: none; }
+    @page { size: A4 landscape; margin: 0; }
+  }
+  @media screen {
+    body { padding: 20px; display: flex; justify-content: center; }
+    .sheet { box-shadow: 0 6px 24px rgba(0,0,0,.4); }
+  }
+  .ctrl button:disabled { opacity: .5; cursor: wait; }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+<div class="ctrl">
+  <button onclick="setRatio('a4')">A4横</button>
+  <button onclick="setRatio('16x9')">16:9</button>
+  <button onclick="setRatio('3x2')">3:2</button>
+  <button onclick="document.body.classList.toggle('light')">Light/Dark</button>
+  <button onclick="window.print()">印刷</button>
+  <button id="btn-png" onclick="exportPng()">PNG保存</button>
+</div>
+
+<div class="sheet" id="sheet">
+  <div class="title">
+    <h1>k30 Keymap</h1>
+    <span class="sub">app/snippets/fj88/k30.keymap</span>
+    <span class="legend">
+      <span><span class="sw" style="background: var(--key-bg); border-color: var(--key-border);"></span>key</span>
+      <span><span class="sw" style="background: var(--trans);"></span>trans</span>
+      <span><span class="sw" style="background: var(--held);"></span>held</span>
+      <span><span class="sw" style="background: var(--hit);"></span>combo</span>
+    </span>
+  </div>
+
+  <div class="layers" id="layers"></div>
+
+  <div class="combos">
+    <h2>Combos</h2>
+    <div class="combo-sections" id="combo-sections"></div>
+  </div>
+</div>
+
+<script>
+const POS = [
+  [60, 28],  [120, 28], [180, 28], [240, 56], [330, 56], [390, 28], [450, 28], [510, 28],
+  [0, 112],  [60, 84],  [120, 84], [180, 84], [240,112], [330,112], [390, 84], [450, 84], [510, 84], [570,112],
+  [0, 168],  [60,140],  [120,140], [180,140],            [390,140], [450,140], [510,140], [570,168],
+  [180,196], [240,196], [330,196], [390,196]
+];
+const VB_W = 630, VB_H = 224;
+const KW = 56, KH = 52;
+
+const LAYERS = [
+  {
+    id: 'BASE', title: 'BASE', desc: 'Romaji split (vowels L / consonants R) — hold-tap mods on home-row + pinkies',
+    keys: [
+      {t:'L'}, {t:'U'}, {t:'F'}, {t:'.'}, {t:'G'}, {t:'W'}, {t:'R'}, {t:'Y'},
+      {t:'E'}, {t:'I'}, {t:'A'}, {t:'O'}, {t:'-'}, {t:'K'}, {t:'T'}, {t:'N'}, {t:'S'}, {t:'H'},
+      {t:'Z', h:'MUS'}, {t:'X', h:'GUI'}, {t:'C'}, {t:'V', h:'ALT'},
+      {t:'D', h:'ALT'}, {t:'M'}, {t:'J', h:'GUI'}, {t:'B', h:'MUS'},
+      {t:'muh', h:'CTRL', macro:true},
+      {t:'SPC', h:'SHFT'},
+      {t:'hen', h:'PAD', macro:true},
+      {t:'TAB', h:'HYP'}
+    ]
+  },
+  {
+    id: 'PAD', title: 'PAD', desc: 'Numbers / navigation / symbols',
+    keys: [
+      {t:'1'}, {t:'2'}, {t:'3'}, {t:'"'}, {t:'`'}, {t:'<'}, {t:'='}, {t:'>'},
+      {t:'0'}, {t:'4', h:'SHFT'}, {t:'5', h:'CTRL'}, {t:'6', h:'ALT'}, {t:"'", h:'GUI'},
+      {t:'←'}, {t:'↓'}, {t:'↑'}, {t:'→'}, {t:':'},
+      {t:'%'}, {t:'7'}, {t:'8'}, {t:'9'},
+      {t:'HOME'}, {t:'END'}, {t:'{'}, {t:'}'},
+      {t:'BSPC', h:'CTRL'}, {cls:'trans'}, {cls:'held'}, {t:'DEL'}
+    ]
+  },
+  {
+    id: 'MUS', title: 'MUS', desc: 'Mouse / media / F-keys',
+    keys: [
+      {t:'scr←', small:true}, {t:'scr→', small:true}, {t:'V-'}, {t:'V+'},
+      {t:'scr↑', small:true}, {t:'MB4'}, {t:'mv↑', small:true}, {t:'MB5'},
+      {t:'Br-'}, {t:'SHFT', small:true}, {t:'CTRL', small:true}, {t:'ALT', small:true}, {t:'GUI', small:true},
+      {t:'scr↓', small:true}, {t:'mv←', small:true}, {t:'mv↓', small:true}, {t:'mv→', small:true}, {t:'Br+'},
+      {t:'OPT', h:'mo'}, {t:'F18'}, {t:'F20'}, {t:'F19'},
+      {t:'F18'}, {t:'F20'}, {t:'F19'}, {t:'OPT', h:'mo'},
+      {t:'MB3'}, {t:'SHFT', small:true}, {t:'MB1'}, {t:'MB2'}
+    ]
+  }
+];
+
+const SECTIONS = [
+  { title: 'Rare letters', items: [
+    { pair: [
+      { out: 'Q', pos: [0,8],   note: 'L+E' },
+      { out: 'P', pos: [17,25], note: 'H+B' },
+    ]},
+  ]},
+  { title: 'Adjacent finger  (左右対称ペア順)', items: [
+    { pair: [
+      { out: '[',  pos: [0,1],   note: 'L+U' },
+      { out: ']',  pos: [6,7],   note: 'R+Y' },
+    ]},
+    { pair: [
+      { out: '(',  pos: [20,21], note: 'C+V' },
+      { out: ')',  pos: [22,23], note: 'D+M' },
+    ]},
+    { pair: [
+      { out: '+',  pos: [19,21], note: 'X+V' },
+      { out: '*',  pos: [22,24], note: 'D+J' },
+    ]},
+    { pair: [
+      { out: '~',  pos: [19,20], note: 'X+C' },
+      { out: '_',  pos: [23,24], note: 'M+J' },
+    ]},
+    { pair: [
+      { out: '!',  pos: [6,16],  note: 'R+S' },
+      { out: '?',  pos: [15,24], note: 'N+J' },
+    ]},
+    { out: '|',  pos: [5,15],  note: 'W+N' },
+    { out: '&',  pos: [14,23], note: 'T+M' },
+    { out: '@',  pos: [5,7],   note: 'W+Y' },
+  ]},
+  { title: 'Skip-col / pinky', items: [
+    { out: '^',  pos: [0,2],   note: 'L+F' },
+    { out: '#',  pos: [4,5],   note: 'G+W' },
+  ]},
+  { title: 'Same-column', items: [
+    { out: ',',  pos: [3,12],  note: '.+-  hold=ALT' },
+    { out: '/',  pos: [4,13],  note: 'G+K' },
+    { out: ';',  pos: [5,14],  note: 'W+T' },
+    { out: '$',  pos: [6,15],  note: 'R+N' },
+    { out: '¥',  pos: [11,21], note: 'O+V' },
+    { out: '\\', pos: [14,22], note: 'T+D  Mac:素/Win:Shift+' },
+  ]},
+  { title: 'Control / edit', items: [
+    { pair: [
+      { out: 'ESC',   pos: [3,4],   note: '.+G  BAS+MUS', wide: true },
+      { out: 'ENTER', pos: [22,28], note: 'D+hen', wide: true },
+    ]},
+    { out: 'm-ESC', pos: [21,26], note: 'V+muh  muh+LANG2+ESC', wide: true },
+    { out: 'BSPC',  pos: [13,14], note: 'K+T', wide: true },
+    { out: 'exit',  pos: [8,19],  note: 'E+X → "exit"', wide: true },
+  ]},
+  { title: 'PAD · F-keys  (anchor = pos6 "=")', items: [
+    { out: 'F1',  pos: [6,0]  },
+    { out: 'F2',  pos: [6,1]  },
+    { out: 'F3',  pos: [6,2]  },
+    { out: 'F4',  pos: [6,9]  },
+    { out: 'F5',  pos: [6,10] },
+    { out: 'F6',  pos: [6,11] },
+    { out: 'F7',  pos: [6,19] },
+    { out: 'F8',  pos: [6,20] },
+    { out: 'F9',  pos: [6,21] },
+    { out: 'F10', pos: [6,8]  },
+    { out: 'F11', pos: [6,19,20] },
+    { out: 'F12', pos: [6,20,21] },
+  ]},
+  { title: 'PAD · misc', items: [
+    { out: 'PgUp', pos: [6,15],  note: '=+↑', wide: true },
+    { out: 'PgDn', pos: [5,14],  note: '<+↓', wide: true },
+    { out: 'APP',  pos: [23,24], note: 'END+{', wide: true },
+  ]},
+];
+
+function escapeXml(s) {
+  return String(s).replace(/[<>&"']/g, c => ({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderLayer(layer) {
+  const keys = layer.keys;
+  let svg = `<svg viewBox="-32 -4 ${VB_W+40} ${VB_H+8}" xmlns="http://www.w3.org/2000/svg">`;
+  for (let i = 0; i < POS.length; i++) {
+    const [cx, cy] = POS[i];
+    const k = keys[i] || {};
+    const cls = k.cls || '';
+    const x = cx - KW/2, y = cy - KH/2;
+    svg += `<g class="k-group">`;
+    svg += `<rect class="k-rect ${cls}" x="${x}" y="${y}" width="${KW}" height="${KH}" rx="6" ry="6"/>`;
+    if (k.t) {
+      const tCls = (k.small ? 'small ' : '') + (k.macro ? 'macro ' : '');
+      const ty = k.h ? cy - 5 : cy + 3;
+      svg += `<text class="k-tap ${tCls}" x="${cx}" y="${ty}">${escapeXml(k.t)}</text>`;
+    }
+    if (k.h) {
+      svg += `<text class="k-hold" x="${cx}" y="${cy + 12}">${escapeXml(k.h)}</text>`;
+    }
+    svg += `</g>`;
+  }
+  svg += `</svg>`;
+  return `<div class="layer">
+    <h2>${escapeXml(layer.title)} <span class="desc">${escapeXml(layer.desc||'')}</span></h2>
+    <div class="kb">${svg}</div>
+  </div>`;
+}
+
+function renderMiniKb(positions) {
+  const set = new Set(positions);
+  let svg = `<svg viewBox="-32 -4 ${VB_W+40} ${VB_H+8}" class="mini-kb" preserveAspectRatio="xMidYMid meet">`;
+  for (let i = 0; i < POS.length; i++) {
+    const [cx, cy] = POS[i];
+    const cls = 'mini-rect' + (set.has(i) ? ' hit' : '');
+    svg += `<rect class="${cls}" x="${cx-KW/2}" y="${cy-KH/2}" width="${KW}" height="${KH}" rx="6" ry="6"/>`;
+  }
+  svg += `</svg>`;
+  return svg;
+}
+
+function renderTile(it) {
+  const note = it.note || '';
+  const outCls = it.wide ? 'out wide' : 'out';
+  return `<div class="combo">
+    <span class="${outCls}">${escapeXml(it.out)}</span>
+    <span class="note">${escapeXml(note)}</span>
+    ${renderMiniKb(it.pos)}
+  </div>`;
+}
+
+function renderCombos() {
+  const html = SECTIONS.map(sec => {
+    const header = `<h3>${escapeXml(sec.title)}</h3>`;
+    const items = sec.items.map(it => {
+      if (it.pair) {
+        return `<div class="pair">${it.pair.map(renderTile).join('')}</div>`;
+      }
+      return renderTile(it);
+    }).join('');
+    return header + items;
+  }).join('');
+  document.getElementById('combo-sections').innerHTML = html;
+}
+
+document.getElementById('layers').innerHTML = LAYERS.map(renderLayer).join('');
+renderCombos();
+
+function setRatio(r) {
+  const sh = document.getElementById('sheet');
+  sh.classList.remove('ratio-16x9', 'ratio-3x2');
+  if (r === '16x9') sh.classList.add('ratio-16x9');
+  else if (r === '3x2') sh.classList.add('ratio-3x2');
+  if (r === 'a4') {
+    sh.style.width = '297mm'; sh.style.height = '210mm';
+  } else {
+    sh.style.width = ''; sh.style.height = '';
+  }
+}
+
+async function exportPng() {
+  const btn = document.getElementById('btn-png');
+  if (typeof html2canvas === 'undefined') {
+    alert('html2canvas が読み込めませんでした（オフラインの可能性）。');
+    return;
+  }
+  btn.disabled = true;
+  const prev = btn.textContent;
+  btn.textContent = '生成中…';
+  try {
+    const sheet = document.getElementById('sheet');
+    const bg = getComputedStyle(sheet).getPropertyValue('background-color').trim() || '#1a1b20';
+    const canvas = await html2canvas(sheet, {
+      backgroundColor: bg,
+      scale: 2,
+    });
+    const link = document.createElement('a');
+    link.download = 'k30-keymap.png';
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  } catch (e) {
+    console.error(e);
+    alert('PNG保存に失敗しました: ' + e.message);
+  } finally {
+    btn.disabled = false;
+    btn.textContent = prev;
+  }
+}
+</script>
+</body>
+</html>

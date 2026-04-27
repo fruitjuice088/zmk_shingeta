@@ -6,11 +6,6 @@ VOLUMES=(zmk-zephyr zmk-modules zmk-tools zmk-west)
 BOARD="seeeduino_xiao_ble"
 KEYNUM=30
 SHIELD="revxlp${KEYNUM}"
-KEYMAP="app/snippets/fj88/k${KEYNUM}.keymap"
-KEYMAP_NAME="$(basename "${KEYMAP%.keymap}")"
-
-KEY_LAYOUT="2vv3332+2 2+23332vv"  # k30
-#KEY_LAYOUT="33333+2 2+33333"  # k34
 
 run_container() {
   docker run --rm \
@@ -47,24 +42,6 @@ case "${1:-build}" in
     mkdir -p .build
     cp app/build/zephyr/zmk.uf2 ".build/${SHIELD}-${BOARD}.uf2"
     echo "Artifact: .build/${SHIELD}-${BOARD}.uf2"
-
-    # Generate keymap SVG
-    run_container '
-      KM=/tmp/k${KEYNUM}.keymap
-      sed -e "s/&je /\&kp /g" -e "s/&jmt /\&mt /g" -e "s/&jlt /\&lt /g" \
-          -e "s/JP_COLN/COLON/g" -e "s/JP_RT/GT/g" -e "s/JP_//g" \
-        '"$KEYMAP"' > "$KM"
-      CFG=app/snippets/fj88/keymap-drawer/config.yaml
-      keymap -c "$CFG" parse -z "$KM" -l BASE JPN PAD SYM FUNC MSE OPT \
-        | sed "1s|^layout:.*|layout: {cols_thumbs_notation: '"$KEY_LAYOUT"'}|" \
-        > app/build/keymap.yaml
-      keymap -c "$CFG" draw app/build/keymap.yaml -s BASE PAD SYM --keys-only -o app/build/keymap.svg
-      keymap -c "$CFG" draw app/build/keymap.yaml -s BASE PAD SYM --combos-only -o app/build/keymap-combos.svg
-    '
-    cp app/build/keymap.yaml ".build/${KEYMAP_NAME}.yaml"
-    cp app/build/keymap.svg ".build/${KEYMAP_NAME}.svg"
-    cp app/build/keymap-combos.svg ".build/${KEYMAP_NAME}-combos.svg"
-    echo "Keymap:   .build/${KEYMAP_NAME}.yaml .build/${KEYMAP_NAME}.svg .build/${KEYMAP_NAME}-combos.svg"
     ;;
 
   clean)
