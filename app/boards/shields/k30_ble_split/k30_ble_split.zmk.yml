@@ -1,0 +1,11 @@
+file_format: "1"
+id: k30_ble_split
+name: k30_ble_split
+type: shield
+url: https://github.com/fruitjuice088/zmk_shingeta/tree/main/experiments/kicad/k30_ble_split
+requires: [seeed_xiao]
+features:
+  - keys
+siblings:
+  - k30_ble_split_left
+  - k30_ble_split_right

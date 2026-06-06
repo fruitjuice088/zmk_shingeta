@@ -4,8 +4,6 @@ set -euo pipefail
 IMAGE_NAME="zmk-build-local"
 VOLUMES=(zmk-zephyr zmk-modules zmk-tools zmk-west)
 BOARD="seeeduino_xiao_ble"
-KEYNUM=30
-SHIELD="revxlp${KEYNUM}"
 
 run_container() {
   docker run --rm \
@@ -19,29 +17,62 @@ run_container() {
     bash -c "$1"
 }
 
+ensure_image() {
+  echo "==> Building Docker image..."
+  docker build -t "$IMAGE_NAME" -f Dockerfile.build .
+}
+
+build_shield() {
+  local shield="$1"
+  local pristine="${2:-}"
+
+  run_container '
+    if [ ! -f .west/config ]; then
+      echo "==> Initial setup: Running west init and update..."
+      printf "[manifest]\npath = app\nfile = west.yml\n" > .west/config
+      west update
+      west zephyr-export
+    fi
+    west build -s app -d app/build '"$pristine"' -b '"$BOARD"' -- -DSHIELD='"$shield"'
+  '
+
+  mkdir -p .build
+  cp app/build/zephyr/zmk.uf2 ".build/${shield}-${BOARD}.uf2"
+  echo "Artifact: .build/${shield}-${BOARD}.uf2"
+}
+
 PRISTINE=""
-if [[ "${2:-}" == "-p" || "${1:-}" == "-p" ]]; then
-  PRISTINE="-p"
-fi
+for arg in "$@"; do
+  if [[ "$arg" == "-p" ]]; then
+    PRISTINE="-p"
+  fi
+done
 
-case "${1:-build}" in
-  build)
-    echo "==> Building Docker image..."
-    docker build -t "$IMAGE_NAME" -f Dockerfile.build .
+case "${1:-split}" in
+  split|build)
+    ensure_image
+    build_shield k30_ble_split_left "$PRISTINE"
+    build_shield k30_ble_split_right "$PRISTINE"
+    ;;
 
-    run_container '
-      if [ ! -f .west/config ]; then
-        echo "==> Initial setup: Running west init and update..."
-        printf "[manifest]\npath = app\nfile = west.yml\n" > .west/config
-        west update
-        west zephyr-export
-      fi
-      west build -s app -d app/build '"$PRISTINE"' -b '"$BOARD"' -- -DSHIELD='"$SHIELD"'
-    '
+  left)
+    ensure_image
+    build_shield k30_ble_split_left "$PRISTINE"
+    ;;
 
-    mkdir -p .build
-    cp app/build/zephyr/zmk.uf2 ".build/${SHIELD}-${BOARD}.uf2"
-    echo "Artifact: .build/${SHIELD}-${BOARD}.uf2"
+  right)
+    ensure_image
+    build_shield k30_ble_split_right "$PRISTINE"
+    ;;
+
+  reset|settings_reset)
+    ensure_image
+    build_shield settings_reset "$PRISTINE"
+    ;;
+
+  revxlp)
+    ensure_image
+    build_shield revxlp30 "$PRISTINE"
     ;;
 
   clean)
@@ -58,14 +89,12 @@ case "${1:-build}" in
     ;;
 
   update)
-    echo "==> Building Docker image..."
-    docker build -t "$IMAGE_NAME" -f Dockerfile.build .
+    ensure_image
     run_container 'west update && west zephyr-export'
     echo "Dependencies are up-to-date."
     ;;
 
   *)
-    echo "Usage: ./build.sh [build|clean|nuke|update]"
+    echo "Usage: ./build.sh [split|build|left|right|reset|settings_reset|revxlp|clean|nuke|update] [-p]"
     ;;
 esac
-

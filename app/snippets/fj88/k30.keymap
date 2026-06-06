@@ -12,8 +12,8 @@
 
 #include <dt-bindings/zmk/modifiers.h>
 
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 2900  // default: 600
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 30    // default: 10
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 5600  // QMK fj88_30: 2 * 28 / 10ms
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 250   // QMK fj88_30: 1 * 20 / 80ms
 #include <dt-bindings/zmk/pointing.h>
 
 #define BAS_L 0
@@ -37,8 +37,13 @@
   quick-tap-ms = <175>;
 };
 &mmv {
+  trigger-period-ms = <10>;
+  time-to-max-speed-ms = <600>;
+  acceleration-exponent = <1>;
+};
+&msc {
   trigger-period-ms = <16>;
-  time-to-max-speed-ms = <700>;
+  time-to-max-speed-ms = <1200>;
   acceleration-exponent = <1>;
 };
 
@@ -130,10 +135,11 @@
     cmb_bslh  { key-positions = <14 22>; layers = <BAS_L>; bindings = <&jbsl>;                      };  // t+d  (Mac:素 / Win:Shift+)
 
     // === BAS_L: Control / edit ===
-    cmb_bspc  { key-positions = <13 14>; layers = <BAS_L>;       bindings = <&kp BSPC>;              };  // k+t
-    cmb_esc   { key-positions = < 3  4>; layers = <BAS_L MUS_L>; bindings = <&kp ESC>;               };  // .+g
-    cmb_m_esc { key-positions = <21 26>; layers = <BAS_L>;       bindings = <&macro_muhenkan_esc>;   };
-    cmb_enter { key-positions = <22 28>; layers = <BAS_L>;       bindings = <&kp ENTER>;             };
+    cmb_bspc     { key-positions = <13 14>; layers = <BAS_L>;          bindings = <&kp BSPC>;            };  // k+t
+    cmb_esc      { key-positions = < 3  4>; layers = <BAS_L MUS_L>;    bindings = <&kp ESC>;             };  // .+g
+    cmb_m_esc    { key-positions = <21 26>; layers = <BAS_L>;          bindings = <&macro_muhenkan_esc>; };
+    cmb_enter    { key-positions = <22 28>; layers = <BAS_L>;          bindings = <&kp ENTER>;           };
+    cmb_mus_lock { key-positions = <18 25>; layers = <BAS_L MUS_L>;    bindings = <&tog MUS_L>;          };  // Z+B / Opt+Opt
 
     // === BAS_L: Vim macros ===
     cmb_exit  { key-positions = < 8 19>; layers = <BAS_L>; bindings = <&macro_send_exit>;            };  // e+x
@@ -195,25 +201,25 @@
 
     //      ←S    →S    V-    V+         ↑S    MB4   ↑M    MB5
     // B-   Sft   Ctl   Alt   Gui        ↓S    ←M    ↓M    →M    B+
-    // Opt  F18   F20   F19              F18   F20   F19   Opt
+    // O/E  F18   F20   F19              F18   F20   F19   O/E
     //                  MB3   Sft        MB1   MB2
     mouse_layer {
       bindings = <
                          &msc SCRL_LEFT  &msc SCRL_RIGHT  &kp C_VOL_DN  &kp C_VOL_UP     &msc SCRL_UP    &mkp MB4        &mmv MOVE_UP    &mkp MB5
         &kp C_BRI_DN     &kp LSHFT       &kp LCTRL        &kp LALT      &kp LGUI         &msc SCRL_DOWN  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &kp C_BRI_UP
-        &mo OPT_L        &kp F18         &kp F20          &kp F19                                       &kp F18         &kp F20         &kp F19          &mo OPT_L
+        &lt OPT_L ESC    &kp F18         &kp F20          &kp F19                                       &kp F18         &kp F20         &kp F19          &lt OPT_L ESC
                                                           &mkp MB3      &kp LSHFT        &mkp MB1        &mkp MB2
       >;
     };
 
     //      x     x     x     boot       boot  x     x     x
-    // BT_C Tog   x     x     x          BT_0  BT_1  BT_2  BT_3  BT_4
+    // BT_C Tog   x     BAS   MUS_T      BT_0  BT_1  BT_2  BT_3  BT_4
     // PRS  x     x     x                      x     x     x     PRS
     //                  x     x          x     x
     option_layer {
       bindings = <
                       XXX           XXX           XXX           &bootloader      &bootloader   XXX           XXX           XXX
-        &bt BT_CLR    &out OUT_TOG  XXX           XXX           XXX              &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
+        &bt BT_CLR    &out OUT_TOG  XXX           &to BAS_L     XXX              &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
         PRESSED       XXX           XXX           XXX                                          XXX           XXX           XXX           PRESSED
                                                   XXX           XXX              XXX           XXX
       >;
