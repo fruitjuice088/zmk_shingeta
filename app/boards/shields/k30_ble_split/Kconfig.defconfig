@@ -1,7 +1,7 @@
 # Copyright (c) 2026 The ZMK Contributors
 # SPDX-License-Identifier: MIT
 
-if SHIELD_K30_BLE_SPLIT_LEFT
+if SHIELD_K30_BLE_SPLIT_RIGHT
 
 config ZMK_KEYBOARD_NAME
     default "k30_ble_split"
