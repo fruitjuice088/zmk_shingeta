@@ -184,7 +184,7 @@ static const struct hid_ops ops = {
     .set_report = set_report_cb,
 };
 
-static int zmk_usb_hid_send_report(const uint8_t *report, size_t len) {
+static int zmk_usb_hid_send_report(const uint8_t *report, size_t len, k_timeout_t wait) {
     switch (zmk_usb_get_status()) {
     case USB_DC_SUSPEND:
         return usb_wakeup_request();
@@ -194,7 +194,10 @@ static int zmk_usb_hid_send_report(const uint8_t *report, size_t len) {
     case USB_DC_UNKNOWN:
         return -ENODEV;
     default:
-        k_sem_take(&hid_sem, K_MSEC(30));
+        if (k_sem_take(&hid_sem, wait) != 0) {
+            return -EBUSY;
+        }
+
         int err = hid_int_ep_write(hid_dev, report, len, NULL);
 
         if (err) {
@@ -208,7 +211,7 @@ static int zmk_usb_hid_send_report(const uint8_t *report, size_t len) {
 int zmk_usb_hid_send_keyboard_report(void) {
     size_t len;
     uint8_t *report = get_keyboard_report(&len);
-    return zmk_usb_hid_send_report(report, len);
+    return zmk_usb_hid_send_report(report, len, K_MSEC(30));
 }
 
 int zmk_usb_hid_send_consumer_report(void) {
@@ -219,7 +222,7 @@ int zmk_usb_hid_send_consumer_report(void) {
 #endif /* IS_ENABLED(CONFIG_ZMK_USB_BOOT) */
 
     struct zmk_hid_consumer_report *report = zmk_hid_get_consumer_report();
-    return zmk_usb_hid_send_report((uint8_t *)report, sizeof(*report));
+    return zmk_usb_hid_send_report((uint8_t *)report, sizeof(*report), K_MSEC(30));
 }
 
 #if IS_ENABLED(CONFIG_ZMK_POINTING)
@@ -230,8 +233,12 @@ int zmk_usb_hid_send_mouse_report() {
     }
 #endif /* IS_ENABLED(CONFIG_ZMK_USB_BOOT) */
 
+    // Non-blocking: called synchronously from the mouse move tick generator
+    // (behavior_input_two_axis) on the system workqueue. Waiting here for the previous
+    // IN transfer to complete would stall tick generation whenever the host is slow to
+    // poll, turning transient USB congestion into visible stutter/bursts.
     struct zmk_hid_mouse_report *report = zmk_hid_get_mouse_report();
-    return zmk_usb_hid_send_report((uint8_t *)report, sizeof(*report));
+    return zmk_usb_hid_send_report((uint8_t *)report, sizeof(*report), K_NO_WAIT);
 }
 #endif // IS_ENABLED(CONFIG_ZMK_POINTING)
 

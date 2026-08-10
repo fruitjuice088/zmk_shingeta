@@ -1,0 +1,13 @@
+/*
+ * Copyright (c) 2026 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+/dts-v1/;
+#include "nakid30.dtsi"
+
+/* 右手は kscan の col 0..14 を後半 15 列(15..29)に載せる。 */
+&default_transform {
+    col-offset = <15>;
+};

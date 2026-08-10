@@ -14,16 +14,23 @@ To review features, check out the [feature overview](https://zmk.dev/docs/). ZMK
 
 ---
 
-ZMKの`behavior`として新下駄配列を実装。  
-また、親指でEnterキーを押しながらキーを入力することで、ひらがなONと新下駄レイヤをアクティブ化するようにしている。
+ZMK フォーク。
 
+- `app/boards/arm/nakid30/` — [nakid30](https://github.com/fruitjuice088/nakid30) の board 定義(MDBT50Q 直付け・ダイレクトスキャン 30キー分割)
+- `app/boards/shields/k30_split/` — [k30_split](https://github.com/fruitjuice088/k30_split) の shield 定義(XIAO nRF52840・4×5 マトリクス)
+- `app/boards/shields/revxlp30/` — revxlp を 30キーで使うための shield 定義
+- `app/snippets/fj88/k30.keymap` — 上記すべてが include するキーマップ本体(大西配列ベース 30キー)
+- `app/src/behaviors/behavior_jp_enter.c` — 日本語配列キーコードを送る behavior
+- `app/src/behaviors/behavior_persistent_macro.c` — キー列を記録・再生する behavior
 
 ビルド（Docker必須）
 ```bash
 cd zmk_shingeta
-./build.sh          # ビルド（初回は自動で west init + update）
+./build.sh          # nakid30 左右をビルド（初回は自動で west init + update）
+./build.sh split    # k30_split 左右をビルド
+./build.sh revxlp   # revxlp30 をビルド
 ./build.sh clean    # ビルドキャッシュ削除
 ./build.sh update   # 依存の更新（west update）
 ./build.sh nuke     # volume全削除（完全リセット）
 ```
-成果物: `app/build/zephyr/zmk.uf2`
+成果物: `.build/*.uf2`

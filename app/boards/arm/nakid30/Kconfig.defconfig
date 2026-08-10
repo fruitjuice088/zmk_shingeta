@@ -1,0 +1,45 @@
+# Copyright (c) 2026 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+if BOARD_NAKID30_LEFT || BOARD_NAKID30_RIGHT
+
+config BOARD
+    default "nakid30"
+
+config ZMK_KEYBOARD_NAME
+    default "nakid30"
+
+config ZMK_SPLIT
+    default y
+
+# 外部電源スイッチ回路を持たない。
+# nice_nano 系の EXT_POWER は P0.13 を制御に使うが、本設計では P0.13 = KEY2。
+config ZMK_EXT_POWER
+    default n
+
+if ZMK_BLE
+
+config ZMK_SLEEP
+    default y
+
+endif # ZMK_BLE
+
+if USB_DEVICE_STACK
+
+config USB_NRFX
+    default y
+
+endif # USB_DEVICE_STACK
+
+config BT_CTLR
+    default BT
+
+endif # BOARD_NAKID30_LEFT || BOARD_NAKID30_RIGHT
+
+if BOARD_NAKID30_RIGHT
+
+# central は右手
+config ZMK_SPLIT_ROLE_CENTRAL
+    default y
+
+endif # BOARD_NAKID30_RIGHT

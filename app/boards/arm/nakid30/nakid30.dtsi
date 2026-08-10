@@ -1,0 +1,134 @@
+/*
+ * Copyright (c) 2026 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+#include <nordic/nrf52840_qiaa.dtsi>
+#include <dt-bindings/zmk/matrix_transform.h>
+
+/ {
+    model = "nakid30";
+    compatible = "fj88,nakid30";
+
+    chosen {
+        zephyr,code-partition = &code_partition;
+        zephyr,sram = &sram0;
+        zephyr,flash = &flash0;
+        zmk,battery = &vbatt;
+        zmk,kscan = &kscan0;
+        zmk,physical-layout = &default_layout;
+    };
+
+    default_layout: default_layout {
+        compatible = "zmk,physical-layout";
+        display-name = "Default";
+        transform = <&default_transform>;
+        kscan = <&kscan0>;
+    };
+
+    /*
+     * ダイレクトスキャンなので kscan は (row 0, col 0..14) しか生成しない。
+     * 左右を 1 つの position 空間に収めるため columns = 30 / rows = 1 とし、
+     * 右手側は dts で col-offset = 15 を与えて後半 15 列に載せる。
+     */
+    default_transform: keymap_transform_0 {
+        compatible = "zmk,matrix-transform";
+        columns = <30>;
+        rows = <1>;
+
+        map = <
+            RC(0,0)  RC(0,1)  RC(0,2)  RC(0,3)            RC(0,18) RC(0,17) RC(0,16) RC(0,15)
+            RC(0,4)  RC(0,5)  RC(0,6)  RC(0,7)  RC(0,8)   RC(0,23) RC(0,22) RC(0,21) RC(0,20) RC(0,19)
+            RC(0,9)  RC(0,10) RC(0,11) RC(0,12)           RC(0,27) RC(0,26) RC(0,25) RC(0,24)
+                                       RC(0,13) RC(0,14)  RC(0,29) RC(0,28)
+        >;
+    };
+
+    // ダイレクト 15 キー
+    kscan0: kscan {
+        compatible = "zmk,kscan-gpio-direct";
+        wakeup-source;
+
+        input-gpios
+            = <&gpio0 14 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* KEY1  SW1  */
+            , <&gpio0 13 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* KEY2  SW2  */
+            , <&gpio0 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* KEY3  SW3  */
+            , <&gpio0 23 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* KEY4  SW4  */
+            , <&gpio1  9 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* KEY5  SW5  */
+            , <&gpio0 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* KEY6  SW6  */
+            , <&gpio0 12 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* KEY7  SW7  */
+            , <&gpio0 16 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* KEY8  SW8  */
+            , <&gpio0 20 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* KEY9  SW9  */
+            , <&gpio0  7 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* KEY10 SW10 */
+            , <&gpio0  6 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* KEY11 SW11 */
+            , <&gpio1  8 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* KEY12 SW12 */
+            , <&gpio0  8 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* KEY13 SW13 */
+            , <&gpio0 28 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* KEY14 SW14 */
+            , <&gpio1 15 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>   /* KEY15 SW15 */
+            ;
+    };
+
+    // 電池残量: +BAT --R4(1.5M)-- AIN7(P0.31) --R5(510k)-- P0.30
+    vbatt: vbatt {
+        compatible = "zmk,battery-voltage-divider";
+        io-channels = <&adc 7>;
+        power-gpios = <&gpio0 30 (GPIO_OPEN_DRAIN | GPIO_ACTIVE_LOW)>;
+        output-ohms = <510000>;
+        full-ohms = <(1500000 + 510000)>;
+    };
+};
+
+&adc {
+    status = "okay";
+};
+
+&gpiote {
+    status = "okay";
+};
+
+&gpio0 {
+    status = "okay";
+};
+
+&gpio1 {
+    status = "okay";
+};
+
+zephyr_udc0: &usbd {
+    status = "okay";
+};
+
+// P0.18 をハードウェアリセットピンにする
+&uicr {
+    gpio-as-nreset;
+};
+
+// Adafruit nRF52 Bootloader レイアウトに合わせる。アプリは SoftDevice 領域の後ろから
+&flash0 {
+    partitions {
+        compatible = "fixed-partitions";
+        #address-cells = <1>;
+        #size-cells = <1>;
+
+        sd_partition: partition@0 {
+            reg = <0x00000000 0x00026000>;
+        };
+        code_partition: partition@26000 {
+            reg = <0x00026000 0x000c6000>;
+        };
+
+        /*
+         * The flash starting at 0x000ec000 and ending at
+         * 0x000f3fff is reserved for use by the application.
+         */
+
+        storage_partition: partition@ec000 {
+            reg = <0x000ec000 0x00008000>;
+        };
+
+        boot_partition: partition@f4000 {
+            reg = <0x000f4000 0x0000c000>;
+        };
+    };
+};

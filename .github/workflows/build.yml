@@ -16,11 +16,11 @@ jobs:
       matrix:
         include:
           - board: seeeduino_xiao_ble
-            shield: k30_ble_split_left
-            artifact-name: k30_ble_split_left_xiao_ble
+            shield: k30_split_left
+            artifact-name: k30_split_left_xiao_ble
           - board: seeeduino_xiao_ble
-            shield: k30_ble_split_right
-            artifact-name: k30_ble_split_right_xiao_ble
+            shield: k30_split_right
+            artifact-name: k30_split_right_xiao_ble
           - board: seeeduino_xiao_ble
             shield: revxlp30
             artifact-name: revxlp30_xiao_ble

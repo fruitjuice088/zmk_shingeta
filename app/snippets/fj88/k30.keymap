@@ -11,6 +11,7 @@
 #include <dt-bindings/zmk/jp_enter.h>
 
 #include <dt-bindings/zmk/modifiers.h>
+#include <dt-bindings/zmk/persistent_macro.h>
 
 #define ZMK_POINTING_DEFAULT_MOVE_VAL 5600  // QMK fj88_30: 2 * 28 / 10ms
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 250   // QMK fj88_30: 1 * 20 / 80ms
@@ -24,7 +25,7 @@
 #define ___     &trans
 #define XXX     &none
 #define PRESSED &none
-#define HYPER   LC(LS(LGUI))
+#define _MHE_   LC(LS(LALT))
 
 &lt {
   flavor = "tap-preferred";
@@ -37,7 +38,7 @@
   quick-tap-ms = <175>;
 };
 &mmv {
-  trigger-period-ms = <10>;
+  trigger-period-ms = <20>;
   time-to-max-speed-ms = <600>;
   acceleration-exponent = <1>;
 };
@@ -66,6 +67,25 @@
       quick-tap-ms = <175>;
       bindings = <&mo>, <&macro_henkan>;
       display-name = "Henkan Layer-Tap";
+    };
+    omht: opt_mus_hold_tap {
+      compatible = "zmk,behavior-hold-tap";
+      #binding-cells = <2>;
+      flavor = "balanced";
+      tapping-term-ms = <180>;
+      quick-tap-ms = <175>;
+      bindings = <&mo>, <&tog>;
+      display-name = "Opt/Mus Hold-Tap";
+    };
+    // 他キーの押下と同時にhold確定
+    sands: space_and_shift {
+      compatible = "zmk,behavior-hold-tap";
+      #binding-cells = <2>;
+      flavor = "hold-preferred";
+      tapping-term-ms = <180>;
+      quick-tap-ms = <175>;
+      bindings = <&kp>, <&kp>;
+      display-name = "Space and Shift";
     };
     // Mac: 素押しでLA(INT3)(=Option+¥) → `\`
     // Win: Shift押しながらでINT1 → `\`（Shiftはmaskして送らないのでINT1単独=`\`）
@@ -139,7 +159,11 @@
     cmb_esc      { key-positions = < 3  4>; layers = <BAS_L MUS_L>;    bindings = <&kp ESC>;             };  // .+g
     cmb_m_esc    { key-positions = <21 26>; layers = <BAS_L>;          bindings = <&macro_muhenkan_esc>; };
     cmb_enter    { key-positions = <22 28>; layers = <BAS_L>;          bindings = <&kp ENTER>;           };
-    cmb_mus_lock { key-positions = <18 25>; layers = <BAS_L MUS_L>;    bindings = <&tog MUS_L>;          };  // Z+B / Opt+Opt
+    cmb_mus_lock { key-positions = <18 25>; layers = <BAS_L MUS_L>;    bindings = <&omht OPT_L MUS_L>;   };  // Z+B tap=MUS_Lトグル hold=OPT_L
+
+    // === BAS_L: 片手だけで OPT_L に入る(DFU 用) ===
+    cmb_opt_l { key-positions = < 2  8 20>; layers = <BAS_L>; bindings = <&sl OPT_L>; require-prior-idle-ms = <500>; };  // F + E + C
+    cmb_opt_r { key-positions = < 5 17 23>; layers = <BAS_L>; bindings = <&sl OPT_L>; require-prior-idle-ms = <500>; };  // W + H + M
 
     // === BAS_L: Vim macros ===
     cmb_exit  { key-positions = < 8 19>; layers = <BAS_L>; bindings = <&macro_send_exit>;            };  // e+x
@@ -182,7 +206,7 @@
                       &kp L         &kp U         &kp F         &kp JP_DOT       &kp G         &kp W         &kp R         &kp Y
         &kp E         &kp I         &kp A         &kp O         &kp JP_MINUS     &kp K         &kp T         &kp N         &kp S         &kp H
         &lt MUS_L Z   &mt LGUI X    &kp C         &mt LALT V                                   &mt RALT D    &kp M         &mt RGUI J    &lt MUS_L B
-                                                  &mct LCTRL 0  &mt LSHFT SPACE  &hlt PAD_L 0  &mt HYPER TAB
+                                                  &mct LCTRL 0  &sands LSHFT SPACE  &hlt PAD_L 0  &mt SPACE TAB
       >;
     };
 
@@ -207,20 +231,20 @@
       bindings = <
                          &msc SCRL_LEFT  &msc SCRL_RIGHT  &kp C_VOL_DN  &kp C_VOL_UP     &msc SCRL_UP    &mkp MB4        &mmv MOVE_UP    &mkp MB5
         &kp C_BRI_DN     &kp LSHFT       &kp LCTRL        &kp LALT      &kp LGUI         &msc SCRL_DOWN  &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT  &kp C_BRI_UP
-        &lt OPT_L ESC    &kp F18         &kp F20          &kp F19                                       &kp F18         &kp F20         &kp F19          &lt OPT_L ESC
-                                                          &mkp MB3      &kp LSHFT        &mkp MB1        &mkp MB2
+        &lt OPT_L ESC    &kp F18         &kp F20          &kp F19                                        &kp F18         &kp F20         &kp F19          &lt OPT_L ESC
+                                                          &mkp MB3  &mt LSHFT LS(SPACE)  &mkp MB1        &mkp MB2
       >;
     };
 
     //      x     x     x     boot       boot  x     x     x
-    // BT_C Tog   x     BAS   MUS_T      BT_0  BT_1  BT_2  BT_3  BT_4
-    // PRS  x     x     x                      x     x     x     PRS
+    // BT_C Tog   x     BAS   PM_C       BT_0  BT_1  BT_2  BT_3  BT_4
+    // PRS  PM1T  PM2T  PM3T                    PM3P  PM2P  PM1P  PRS
     //                  x     x          x     x
     option_layer {
       bindings = <
                       XXX           XXX           XXX           &bootloader      &bootloader   XXX           XXX           XXX
-        &bt BT_CLR    &out OUT_TOG  XXX           &to BAS_L     XXX              &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
-        PRESSED       XXX           XXX           XXX                                          XXX           XXX           XXX           PRESSED
+        &bt BT_CLR    &out OUT_TOG  XXX           &to BAS_L     &persistent_macro PM_CANCEL 0   &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
+        PRESSED       &persistent_macro PM_TOGGLE 0  &persistent_macro PM_TOGGLE 1  &persistent_macro PM_TOGGLE 2                    &persistent_macro PM_PLAY 2  &persistent_macro PM_PLAY 1  &persistent_macro PM_PLAY 0  PRESSED
                                                   XXX           XXX              XXX           XXX
       >;
     };

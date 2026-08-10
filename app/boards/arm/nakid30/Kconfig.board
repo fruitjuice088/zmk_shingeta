@@ -1,0 +1,12 @@
+# nakid30 board configuration
+#
+# Copyright (c) 2026 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+config BOARD_NAKID30_LEFT
+    bool "nakid30 left"
+    depends on SOC_NRF52840_QIAA
+
+config BOARD_NAKID30_RIGHT
+    bool "nakid30 right"
+    depends on SOC_NRF52840_QIAA

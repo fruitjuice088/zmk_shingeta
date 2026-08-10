@@ -422,10 +422,15 @@ void send_mouse_report_callback(struct k_work *work) {
 K_WORK_DEFINE(hog_mouse_work, send_mouse_report_callback);
 
 int zmk_hog_send_mouse_report(struct zmk_hid_mouse_report_body *report) {
-    int err = k_msgq_put(&zmk_hog_mouse_msgq, report, K_MSEC(100));
+    // Non-blocking: the mouse move tick generator (behavior_input_two_axis) runs on the
+    // system workqueue and calls into this synchronously. Blocking here to wait for queue
+    // space would stall the tick generator itself whenever the BLE link can't drain the
+    // queue fast enough, turning transient link congestion into visible stutter/bursts.
+    int err = k_msgq_put(&zmk_hog_mouse_msgq, report, K_NO_WAIT);
     if (err) {
         switch (err) {
-        case -EAGAIN: {
+        case -EAGAIN:
+        case -ENOMSG: {
             LOG_WRN("Consumer message queue full, popping first message and queueing again");
             struct zmk_hid_mouse_report_body discarded_report;
             k_msgq_get(&zmk_hog_mouse_msgq, &discarded_report, K_NO_WAIT);

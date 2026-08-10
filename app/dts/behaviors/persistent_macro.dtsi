@@ -1,0 +1,15 @@
+/*
+ * Copyright (c) 2026 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
+/ {
+    behaviors {
+        persistent_macro: persistent_macro {
+            compatible = "zmk,behavior-persistent-macro";
+            #binding-cells = <2>;
+            display-name = "Persistent Macro";
+        };
+    };
+};

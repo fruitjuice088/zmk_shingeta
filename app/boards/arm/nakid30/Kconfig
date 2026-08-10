@@ -1,0 +1,11 @@
+# Copyright (c) 2026 The ZMK Contributors
+# SPDX-License-Identifier: MIT
+
+# MDBT50Q-1MV2 内蔵インダクタ(Reg1)で DCDC を有効化できる。
+# 高電圧モード(VDDH に電池直結)は取らず LDO で 3.3V を作る構成なので、
+# HV DCDC(SOC_DCDC_NRF52X_HV)は有効にしない。
+config BOARD_ENABLE_DCDC
+    bool "Enable DCDC mode"
+    select SOC_DCDC_NRF52X
+    default y
+    depends on (BOARD_NAKID30_LEFT || BOARD_NAKID30_RIGHT)

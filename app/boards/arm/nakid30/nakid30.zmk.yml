@@ -1,0 +1,14 @@
+file_format: "1"
+id: nakid30
+name: nakid30
+type: board
+arch: arm
+url: https://github.com/fruitjuice088/nakid30
+features:
+  - keys
+outputs:
+  - usb
+  - ble
+siblings:
+  - nakid30_left
+  - nakid30_right

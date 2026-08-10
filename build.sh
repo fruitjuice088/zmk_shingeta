@@ -41,6 +41,26 @@ build_shield() {
   echo "Artifact: .build/${shield}-${BOARD}.uf2"
 }
 
+build_board() {
+  local board="$1"
+  local builddir="app/build_${board}"
+  local pristine="${2:-}"
+
+  run_container '
+    if [ ! -f .west/config ]; then
+      echo "==> Initial setup: Running west init and update..."
+      printf "[manifest]\npath = app\nfile = west.yml\n" > .west/config
+      west update
+      west zephyr-export
+    fi
+    west build -s app -d '"$builddir"' '"$pristine"' -b '"$board"'
+  '
+
+  mkdir -p .build
+  cp "${builddir}/zephyr/zmk.uf2" ".build/${board}.uf2"
+  echo "Artifact: .build/${board}.uf2"
+}
+
 PRISTINE=""
 for arg in "$@"; do
   if [[ "$arg" == "-p" ]]; then
@@ -48,21 +68,17 @@ for arg in "$@"; do
   fi
 done
 
-case "${1:-split}" in
-  split|build)
+case "${1:-nakid30}" in
+  nakid30|build)
     ensure_image
-    build_shield k30_ble_split_left "$PRISTINE"
-    build_shield k30_ble_split_right "$PRISTINE"
+    build_board nakid30_left "$PRISTINE"
+    build_board nakid30_right "$PRISTINE"
     ;;
 
-  left)
+  split)
     ensure_image
-    build_shield k30_ble_split_left "$PRISTINE"
-    ;;
-
-  right)
-    ensure_image
-    build_shield k30_ble_split_right "$PRISTINE"
+    build_shield k30_split_left "$PRISTINE"
+    build_shield k30_split_right "$PRISTINE"
     ;;
 
   reset|settings_reset)
@@ -76,7 +92,7 @@ case "${1:-split}" in
     ;;
 
   clean)
-    rm -rf app/build .build
+    rm -rf app/build app/build_nakid30_left app/build_nakid30_right .build
     echo "Removed build cache."
     ;;
 
@@ -84,7 +100,7 @@ case "${1:-split}" in
     for v in "${VOLUMES[@]}"; do
       docker volume rm "$v" 2>/dev/null && echo "Deleted volume $v." || true
     done
-    rm -rf app/build .build
+    rm -rf app/build app/build_nakid30_left app/build_nakid30_right .build
     echo "Removed all volumes and build cache."
     ;;
 
@@ -95,6 +111,7 @@ case "${1:-split}" in
     ;;
 
   *)
-    echo "Usage: ./build.sh [split|build|left|right|reset|settings_reset|revxlp|clean|nuke|update] [-p]"
+    echo "Usage: ./build.sh [build|nakid30|split|reset|settings_reset|revxlp|clean|nuke|update] [-p]"
+    echo "  (default: nakid30 = nakid30_left + nakid30_right)"
     ;;
 esac
