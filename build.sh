@@ -91,6 +91,11 @@ case "${1:-nakid30}" in
     build_shield revxlp30 "$PRISTINE"
     ;;
 
+  revxlp36)
+    ensure_image
+    build_shield revxlp36 "$PRISTINE"
+    ;;
+
   clean)
     rm -rf app/build app/build_nakid30_left app/build_nakid30_right .build
     echo "Removed build cache."
@@ -111,7 +116,7 @@ case "${1:-nakid30}" in
     ;;
 
   *)
-    echo "Usage: ./build.sh [build|nakid30|split|reset|settings_reset|revxlp|clean|nuke|update] [-p]"
+    echo "Usage: ./build.sh [build|nakid30|split|reset|settings_reset|revxlp|revxlp36|clean|nuke|update] [-p]"
     echo "  (default: nakid30 = nakid30_left + nakid30_right)"
     ;;
 esac

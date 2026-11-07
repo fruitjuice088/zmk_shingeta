@@ -1,0 +1,8 @@
+file_format: "1"
+id: revxlp36
+name: REVXLP36
+type: shield
+url: https://gitlab.com/lpgalaxy/revxlp
+requires: [pro_micro]
+features:
+  - keys
